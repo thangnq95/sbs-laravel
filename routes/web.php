@@ -14,3 +14,6 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('user/{id}', 'UserController@show');
+Route::get('user-invokable/{id}', 'ShowProfile');

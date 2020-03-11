@@ -1,5 +1,5 @@
 <?php
-
+use App\Http\Middleware\CheckAge;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,3 +14,11 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('foo', function () {
+    return 'Hello World';
+})->middleware('age');
+
+Route::get('foo1', function () {
+    return 'Hello World 1';
+})->middleware(CheckAge::class);

@@ -22,3 +22,7 @@ Route::get('foo', function () {
 Route::get('foo1', function () {
     return 'Hello World 1';
 })->middleware(CheckAge::class);
+
+Route::put('post/{id}', function ($id) {
+    //
+})->middleware('role:editor');

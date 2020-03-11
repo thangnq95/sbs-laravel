@@ -14,9 +14,17 @@
 Route::get('/', function () {
     return view('welcome');
 });
-
 //Route::get('user/{id}', 'UserController@show');
-Route::get('user/{id}', 'UserController@update');
-
-
+//Route::get('user/{id}', 'UserController@update');
 Route::get('user-invokable/{id}', 'ShowProfile');
+Route::get('/greeting', function () {
+    return view('greeting', ['name' => 'Thang']);
+});
+Route::get('/greeting1', function () {
+    return view('admin.profile', ['name' => 'Thang1']);
+});
+Route::get('/greeting2', function () {
+    return view('greeting')->with('name', 'Thang2');
+});
+
+

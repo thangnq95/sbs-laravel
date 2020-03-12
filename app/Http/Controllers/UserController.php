@@ -67,4 +67,9 @@ class UserController extends Controller
 
         $request->flash();
     }
+
+    public function profile()
+    {
+        return view('profile', ['user' => 1111111]);
+    }
 }

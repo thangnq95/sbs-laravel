@@ -26,5 +26,5 @@ Route::get('/greeting1', function () {
 Route::get('/greeting2', function () {
     return view('greeting')->with('name', 'Thang2');
 });
-
+Route::get('user/profile', 'UserController@profile');
 

@@ -82,6 +82,8 @@
             <div class="content">
                 <div class="title m-b-md">
                     {{$user}}
+                    <br>
+                    {{$profile["profile"]}}
                 </div>
             </div>
         </div>

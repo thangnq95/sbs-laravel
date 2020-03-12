@@ -22,7 +22,7 @@ class UserController extends Controller
 
 
     /**
-     * Update a user.
+     * Dump basic request with assume update a user.
      *
      * @param Request $request
      * @param int $id
@@ -30,7 +30,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //Testing with url : http://localhost:8000/user/2?name=Thang
+        //Testing with url : http://localhost:8000/basic/request/2?name=Thang
         //Request Path & Method
         $uri = $request->path();
         if ($request->is('user/*')) {
@@ -71,5 +71,15 @@ class UserController extends Controller
     public function profile()
     {
         return view('profile', ['user' => 1111111]);
+    }
+
+    public function exampleUrlGeneration()
+    {
+        var_dump(url("/posts/1"));
+        var_dump(url()->current());
+        var_dump(url()->full());
+        var_dump(url()->previous());
+        var_dump(route('post.show', ['post' => 1]));
+        var_dump(route('comment.show', ['post' => 1, 'comment' => 3]));
     }
 }

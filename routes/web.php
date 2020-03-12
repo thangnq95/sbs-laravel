@@ -14,17 +14,30 @@
 Route::get('/', function () {
     return view('welcome');
 });
-//Route::get('user/{id}', 'UserController@show');
-//Route::get('user/{id}', 'UserController@update');
-Route::get('user-invokable/{id}', 'ShowProfile');
-Route::get('/greeting', function () {
-    return view('greeting', ['name' => 'Thang']);
-});
-Route::get('/greeting1', function () {
+
+#ROUTING
+Route::get('basic/routing/{id}', 'UserController@show');
+
+#REQUESTS
+Route::get('basic/request/{id}', 'UserController@update'); // Test with http://localhost:8000/basic/request/2?name=Thang
+
+#CONTROLLER
+Route::get('basic/controller/single-action/{id}', 'ShowProfile');
+
+#VIEW
+Route::get('/baisc/view/normal', function () {
     return view('admin.profile', ['name' => 'Thang1']);
 });
-Route::get('/greeting2', function () {
+Route::get('baisc/view/share', function () {
     return view('greeting')->with('name', 'Thang2');
 });
-Route::get('user/profile', 'UserController@profile');
+Route::get('baisc/view/composer', 'UserController@profile');
 
+#URL generation
+Route::get('basic/url-generation', 'UserController@exampleUrlGeneration');
+Route::get('/post/{post}', function () {
+    //
+})->name('post.show');
+Route::get('/post/{post}/comment/{comment}', function () {
+    //
+})->name('comment.show');

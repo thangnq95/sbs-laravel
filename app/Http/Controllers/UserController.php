@@ -14,10 +14,12 @@ class UserController extends Controller
      * @param int $id
      * @return View
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        return view('user.profile', ['user' => $id]);
-//        return view('user.profile', ['user' => User::findOrFail($id)]);
+        $request->session()->put('key', 'value');
+        $request->session()->flash('status', 'Task was successful!');
+        $data = $request->session()->all();
+        var_dump($data);
     }
 
 

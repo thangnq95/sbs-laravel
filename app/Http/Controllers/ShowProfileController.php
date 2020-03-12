@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class ShowProfile extends Controller
+class ShowProfileController extends Controller
 {
     /**
      * Handle the incoming request.

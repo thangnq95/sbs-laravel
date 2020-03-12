@@ -22,7 +22,7 @@ Route::get('basic/routing/{id}', 'UserController@show');
 Route::get('basic/request/{id}', 'UserController@update'); // Test with http://localhost:8000/basic/request/2?name=Thang
 
 #CONTROLLER
-Route::get('basic/controller/single-action/{id}', 'ShowProfile');
+Route::get('basic/controller/single-action/{id}', 'ShowProfileController');
 
 #VIEW
 Route::get('/baisc/view/normal', function () {
@@ -35,9 +35,13 @@ Route::get('baisc/view/composer', 'UserController@profile');
 
 #URL generation
 Route::get('basic/url-generation', 'UserController@exampleUrlGeneration');
-Route::get('/post/{post}', function () {
+Route::get('basic/url-generation/post/{post}', function () {
     //
 })->name('post.show');
-Route::get('/post/{post}/comment/{comment}', function () {
+Route::get('basic/url-generation/post/{post}/comment/{comment}', function () {
     //
 })->name('comment.show');
+
+#VALIDATION
+Route::get('basic/validation/post/create', 'PostController@create');
+Route::post('basic/validation/post', 'PostController@store');

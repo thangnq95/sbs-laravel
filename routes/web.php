@@ -21,8 +21,7 @@ Route::get('basic/routing/{id}', 'UserController@show');
 #REQUESTS
 Route::get('basic/request/{id}', 'UserController@update'); // Test with http://localhost:8000/basic/request/2?name=Thang
 
-#CONTROLLER
-Route::get('basic/controller/single-action/{id}', 'ShowProfileController');
+
 
 #VIEW
 Route::get('/baisc/view/normal', function () {
@@ -45,3 +44,23 @@ Route::get('basic/url-generation/post/{post}/comment/{comment}', function () {
 #VALIDATION
 Route::get('basic/validation/post/create', 'PostController@create');
 Route::post('basic/validation/post', 'PostController@store');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+//Protecting Routes
+Route::get('profile', function () {
+    // Only authenticated users may enter...
+    return Auth::user();
+})->middleware('auth');
+
+//Add gr wit middleware
+Route::middleware(['auth'])->group(function () {
+
+    Route::get('/profile1', 'ProfileController@index')->name('profile');
+
+    Route::get('user/profile', function () {
+        // Uses first & second Middleware
+    });
+});

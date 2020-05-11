@@ -68,7 +68,7 @@
 <form action="/basic/validation/post" method="POST">
     @csrf
     <label>Title:</label>
-    <input name="tilte" type="text">
+    <input name="title" type="text">
     <label>Body:</label>
     <input name="body" type="text">
     <button type="submit">Submit</button>

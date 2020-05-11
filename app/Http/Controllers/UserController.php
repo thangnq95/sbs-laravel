@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -72,6 +73,7 @@ class UserController extends Controller
 
     public function profile()
     {
+        Log::info('Showing user profile for user: 1111111');
         return view('profile', ['user' => 1111111]);
     }
 

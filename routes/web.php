@@ -10,6 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+use Illuminate\Http\Request;
 
 Route::get('/', function () {
     return view('welcome');
@@ -65,7 +66,23 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 
-Route::get('api/user', function () {
-    // Only authenticated users may enter...
-    return "API HERE";
-})->middleware('auth.basic.once');
+//Route::get('api/user', function () {
+//    // Only authenticated users may enter...
+//    return "API HERE";
+//})->middleware('auth.basic.once');
+
+#Protecting Routes
+//Query String
+Route::middleware(['auth:api'])->group(function () {
+
+    Route::get('/user', function(Request $request) {
+        return $request->user();
+    });
+    Route::post('/api/user-payload', function() {
+        return "AA";
+//        return $request->user();
+    });
+    Route::post('/api/user-bear-token', function(Request $request) {
+        return $request->user();
+    });
+});

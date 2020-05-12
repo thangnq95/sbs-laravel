@@ -64,3 +64,8 @@ Route::middleware(['auth'])->group(function () {
         // Uses first & second Middleware
     });
 });
+
+Route::get('api/user', function () {
+    // Only authenticated users may enter...
+    return "API HERE";
+})->middleware('auth.basic.once');

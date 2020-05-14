@@ -25,6 +25,21 @@ class PostController extends Controller
     }
 
     /**
+     * Show the form to update a blog post.
+     *
+     * @return Response
+     */
+    public function update()
+    {
+        if (Gate::allows('update-post')) {
+            echo "You can update post now";
+            return view('post.create');
+        } else {
+            echo "You can't update post now.\nPlease login first";
+        }
+    }
+
+    /**
      * Store a new blog post.
      *
      * @param Request $request

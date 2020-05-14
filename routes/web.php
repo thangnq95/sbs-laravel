@@ -87,3 +87,4 @@ Route::middleware(['auth:api'])->group(function () {
 });
 //Posts
 Route::get('/post/create', 'PostController@create')->name('post-create');
+Route::get('/post/update', 'PostController@update')->name('update-create');

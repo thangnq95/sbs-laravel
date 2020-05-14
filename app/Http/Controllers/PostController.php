@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -14,7 +15,13 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('post.create');
+        $user = Auth::user();
+        if (Gate::allows('create-post',$user)) {
+            echo "You can create post now";
+            return view('post.create');
+        } else {
+            echo "You can't create post now.\nPlease login first";
+        }
     }
 
     /**

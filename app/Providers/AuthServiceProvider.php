@@ -25,6 +25,9 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::define('create-post', function ($user) {
+            //Test with check user_id == 1
+            return $user->id==1;
+        });
     }
 }

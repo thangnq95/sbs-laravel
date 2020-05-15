@@ -46,7 +46,7 @@ Route::get('basic/url-generation/post/{post}/comment/{comment}', function () {
 Route::get('basic/validation/post/create', 'PostController@create');
 Route::post('basic/validation/post', 'PostController@store');
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 Route::get('/home', 'HomeController@index')->name('home');
 
@@ -54,7 +54,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('profile', function () {
     // Only authenticated users may enter...
     return Auth::user();
-})->middleware('auth');
+})->middleware('verified');
 
 //Add gr wit middleware
 Route::middleware(['auth'])->group(function () {
@@ -83,8 +83,8 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('/api/user-bear-token', function(Request $request) {
         return $request->user();
     });
-
 });
+
 //Posts
 Route::get('/post/create', 'PostController@create')->name('post-create');
 Route::get('/post/update', 'PostController@update')->name('update-create');

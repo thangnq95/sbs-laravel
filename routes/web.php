@@ -73,16 +73,17 @@ Route::middleware(['auth'])->group(function () {
 
 #Protecting Routes
 //Query String
-Route::middleware(['auth:api'])->group(function () {
+Route::group(['prefix' => 'api','middleware'=>'auth:api'],function (){
     Route::get('/user', function(Request $request) {
         return $request->user();
     });
-    Route::post('/api/user-payload', function() {
+    Route::post('/user-payload', function() {
         return "AA";
     });
-    Route::post('/api/user-bear-token', function(Request $request) {
+    Route::post('/user-bear-token', function(Request $request) {
         return $request->user();
     });
+    Route::resource('orders', 'OrderController');
 });
 
 //Posts

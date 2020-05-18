@@ -6,7 +6,7 @@ use App\Events\OrderShipped;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SendShipmentNotification
+class SendShipmentNotification implements ShouldQueue
 {
     /**
      * Create the event listener.

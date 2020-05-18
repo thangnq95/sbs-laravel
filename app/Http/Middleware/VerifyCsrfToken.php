@@ -19,7 +19,6 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        '/api/user-bear-token',
-        '/api/profile'
+        '/api/*'
     ];
 }

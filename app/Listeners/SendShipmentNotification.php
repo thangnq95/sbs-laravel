@@ -3,8 +3,13 @@
 namespace App\Listeners;
 
 use App\Events\OrderShipped;
+use Illuminate\Mail\Mailable;
+use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Mail;
+
 
 class SendShipmentNotification implements ShouldQueue
 {
@@ -26,6 +31,7 @@ class SendShipmentNotification implements ShouldQueue
      */
     public function handle(OrderShipped $event)
     {
-        //
+
+        Mail::to("thangnq95@gmail.com")->send($event);
     }
 }

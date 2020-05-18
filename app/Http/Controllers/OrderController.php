@@ -47,6 +47,7 @@ class OrderController extends Controller
             'content' => $request->get('content')
         ]);
         $order->save();
+        $this->ship($order);
         return $order;
     }
 
@@ -101,9 +102,9 @@ class OrderController extends Controller
      * @param  int  $orderId
      * @return Response
      */
-    public function ship($orderId)
+    public function ship($order)
     {
-        $order = Order::findOrFail($orderId);
+//        $order = Order::findOrFail($orderId);
 
         // Order shipment logic...
 

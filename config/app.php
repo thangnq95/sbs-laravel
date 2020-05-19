@@ -175,7 +175,9 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        //Add
         App\Providers\ViewServiceProvider::class,
+        App\Providers\BroadcastServiceProvider::class,
 
     ],
 

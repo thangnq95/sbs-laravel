@@ -94,3 +94,6 @@ Route::get('/post/update', 'PostController@update')->name('update-create');
 Route::get('event',function (){
    event(new TaskEvent("Hey how ar you!"));
 });
+Route::get('listen-event',function (){
+    return view('broadcasting.listen');;
+});

@@ -11,6 +11,7 @@
 |
 */
 use Illuminate\Http\Request;
+use App\Events\TaskEvent;
 
 Route::get('/', function () {
     return view('welcome');
@@ -89,3 +90,7 @@ Route::group(['prefix' => 'api','middleware'=>'auth:api'],function (){
 //Posts
 Route::get('/post/create', 'PostController@create')->name('post-create');
 Route::get('/post/update', 'PostController@update')->name('update-create');
+
+Route::get('event',function (){
+   event(new TaskEvent("Hey how ar you!"));
+});

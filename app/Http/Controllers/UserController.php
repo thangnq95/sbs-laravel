@@ -17,12 +17,27 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = DB::select('select * from users where email_verified_at != ?', [""]);
+        $users = DB::table('users')->get();
+        var_dump($users);
 
-        $results = DB::select('select * from users where id = :id', ['id' => 1]);
+        $user = DB::table('users')->where(['name'=>'NguyenThang'])->first();
+        var_dump($user);
 
-        dd($results);
+        $email = DB::table('users')->where(['name'=>'NguyenThang'])->value('email');;
+        var_dump($email);
 
+        $user = DB::table('users')->find(2);
+        var_dump($user);
+
+        $titles = DB::table('users')->pluck('email');
+        var_dump($titles);
+
+        DB::table('users')->orderBy('id')->chunk(1, function ($users) {
+            foreach ($users as $user) {
+                var_dump($user);
+            }
+        });
+        die();
         return view('user.index', ['users' => $users]);
     }
     /**

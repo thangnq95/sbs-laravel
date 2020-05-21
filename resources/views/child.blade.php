@@ -25,7 +25,14 @@
     @alert
         You are not allowed to access this resource!
     @endalert
+    <div>
+        @include('shared.errors')
 
+        <form>
+            <!-- Form Contents -->
+        </form>
+    </div>
+    @each('view.name', ['j1','j2'], 'job')
 @endsection
 <script>
     var app = @json(['a'=>'aa']);

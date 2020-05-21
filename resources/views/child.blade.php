@@ -22,5 +22,8 @@
 
         You are not allowed to access this resource!
     @endcomponent
+    @alert
+        You are not allowed to access this resource!
+    @endalert
 
 @endsection

@@ -12,8 +12,15 @@
 
 @section('content')
     <p>This is my body content.</p>
-    @component('alert')
-        <strong>Whoops!</strong> Something went wrong!
+{{--    @component('alert')--}}
+{{--        <strong>Whoops!</strong> Something went wrong!--}}
+{{--    @endcomponent--}}
+    @component('alert', ['foo' => 'bar'])
+        @slot('title')
+            Forbidden
+        @endslot
+
+        You are not allowed to access this resource!
     @endcomponent
-    
+
 @endsection

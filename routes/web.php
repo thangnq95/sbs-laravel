@@ -91,9 +91,15 @@ Route::group(['prefix' => 'api','middleware'=>'auth:api'],function (){
 Route::get('/post/create', 'PostController@create')->name('post-create');
 Route::get('/post/update', 'PostController@update')->name('update-create');
 
+//Router for Broadcasting
 Route::get('event',function (){
    event(new TaskEvent("Hey how ar you!"));
 });
 Route::get('listen-event',function (){
     return view('broadcasting.listen');;
+});
+
+//Router for Frontend examples
+Route::get('blade', function () {
+    return view('child');
 });

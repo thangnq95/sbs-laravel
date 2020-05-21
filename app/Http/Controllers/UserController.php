@@ -18,7 +18,10 @@ class UserController extends Controller
     public function index()
     {
         $users = DB::select('select * from users where email_verified_at != ?', [""]);
-        dd($users);
+
+        $results = DB::select('select * from users where id = :id', ['id' => 1]);
+
+        dd($results);
 
         return view('user.index', ['users' => $users]);
     }

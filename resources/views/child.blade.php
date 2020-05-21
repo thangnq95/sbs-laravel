@@ -12,4 +12,8 @@
 
 @section('content')
     <p>This is my body content.</p>
+    @component('alert')
+        <strong>Whoops!</strong> Something went wrong!
+    @endcomponent
+    
 @endsection

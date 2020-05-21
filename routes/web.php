@@ -17,14 +17,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-#ROUTING
-Route::get('basic/routing/{id}', 'UserController@show');
-
-#REQUESTS
-Route::get('basic/request/{id}', 'UserController@update'); // Test with http://localhost:8000/basic/request/2?name=Thang
-
-
-
 #VIEW
 Route::get('/baisc/view/normal', function () {
     return view('admin.profile', ['name' => 'Thang1']);
@@ -106,3 +98,13 @@ Route::get('blade', function () {
 Route::get('greeting', function () {
     return view('welcome', ['name' => 'Win']);
 });
+
+
+//Databasbe - Getting started
+#Running Raw SQL Queries
+Route::resource('users', 'UserController');
+
+#REQUESTS
+Route::get('basic/request/{id}', 'UserController@update'); // Test with http://localhost:8000/basic/request/2?name=Thang
+
+

@@ -6,9 +6,22 @@ use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
+    /**
+     * Show a list of all of the application's users.
+     *
+     * @return Response
+     */
+    public function index()
+    {
+        $users = DB::select('select * from users where email_verified_at != ?', [""]);
+        dd($users);
+
+        return view('user.index', ['users' => $users]);
+    }
     /**
      * Show the profile for the given user.
      *

@@ -27,3 +27,7 @@
     @endalert
 
 @endsection
+<script>
+    var app = @json(['a'=>'aa']);
+    console.log(app);
+</script>

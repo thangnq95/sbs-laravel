@@ -36,4 +36,13 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    /**
+     * Get the phone record associated with the user.
+     */
+    public function phone()
+    {
+        return $this->hasOne('App\Model\Phone');
+    }
 }

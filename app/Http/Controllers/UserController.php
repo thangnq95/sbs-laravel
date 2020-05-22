@@ -17,10 +17,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        $paginate = DB::table('users')->paginate(15);
-        $simplePaginate = DB::table('users')->simplePaginate(15);
-        $users = User::paginate(15);
-        dd([$paginate,$simplePaginate,$users]);
+        $users = User::find(1);
+        dd([$users,$users->phone,$users->phone->user]);
         return view('user.index', ['users' => $users]);
     }
     /**

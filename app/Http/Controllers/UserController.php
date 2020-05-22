@@ -17,27 +17,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = DB::table('users')->get();
-        var_dump($users);
-
-        $user = DB::table('users')->where(['name'=>'NguyenThang'])->first();
-        var_dump($user);
-
-        $email = DB::table('users')->where(['name'=>'NguyenThang'])->value('email');;
-        var_dump($email);
-
-        $user = DB::table('users')->find(2);
-        var_dump($user);
-
-        $titles = DB::table('users')->pluck('email');
-        var_dump($titles);
-
-        DB::table('users')->orderBy('id')->chunk(1, function ($users) {
-            foreach ($users as $user) {
-                var_dump($user);
-            }
-        });
-        die();
+        $paginate = DB::table('users')->paginate(15);
+        $simplePaginate = DB::table('users')->simplePaginate(15);
+        $users = User::paginate(15);
+        dd([$paginate,$simplePaginate,$users]);
         return view('user.index', ['users' => $users]);
     }
     /**

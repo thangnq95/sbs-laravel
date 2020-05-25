@@ -17,9 +17,13 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::find(1);
-        dd([$users,$users->phone,$users->phone->user]);
-        return view('user.index', ['users' => $users]);
+        $user = User::find(1);
+
+        foreach ($user->roles as $role) {
+            dd($role->pivot);
+        }
+        die();
+        return view('user.index', ['users' => $user]);
     }
     /**
      * Show the profile for the given user.

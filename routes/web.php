@@ -77,6 +77,9 @@ Route::group(['prefix' => 'api','middleware'=>'auth:api'],function (){
         return $request->user();
     });
     Route::resource('orders', 'OrderController');
+
+
+    Route::resource('posts', 'PostController');
 });
 
 //Posts
@@ -107,4 +110,4 @@ Route::resource('users', 'UserController');
 #REQUESTS
 Route::get('basic/request/{id}', 'UserController@update'); // Test with http://localhost:8000/basic/request/2?name=Thang
 
-
+Route::resource('posts', 'PostController');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Model\Comment;
 use App\Model\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -17,7 +18,10 @@ class PostController extends Controller
     public function index()
     {
         $post = Post::findOrFail(1);
-        dd([$post, $post->comments]);
+
+        $comment = Comment::find(1);
+
+        dd([$post, $post->comments,$comment->post]);
     }
 
     /**

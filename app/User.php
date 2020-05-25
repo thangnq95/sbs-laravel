@@ -50,6 +50,9 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function roles()
     {
-        return $this->belongsToMany('App\Model\Role');
+        return $this->belongsToMany('App\Model\Role')->withPivot([
+            'created_at',
+            'updated_at'
+        ]);
     }
 }

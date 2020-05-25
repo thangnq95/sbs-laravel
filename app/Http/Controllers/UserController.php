@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Model\Supplier;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -17,13 +18,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        $user = User::find(1);
+        $supplier = Supplier::find(1);
 
-        foreach ($user->roles as $role) {
-            dd($role->pivot);
-        }
+        dd($supplier->userHistory);
         die();
-        return view('user.index', ['users' => $user]);
     }
     /**
      * Show the profile for the given user.

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Model\Country;
 use App\Model\Supplier;
 use App\User;
 use App\Http\Controllers\Controller;
@@ -18,9 +19,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        $supplier = Supplier::find(1);
+        $country = Country::find(1);
 
-        dd($supplier->userHistory);
+        dd($country->posts);
         die();
     }
     /**

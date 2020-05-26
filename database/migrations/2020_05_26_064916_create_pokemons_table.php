@@ -15,7 +15,7 @@ class CreatePokemonsTable extends Migration
     {
         Schema::create('pokemons', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('no');
+            $table->string('no',5);
             $table->string('pic');
             $table->string('name');
             $table->string('types');//Define types : Grass, Poison

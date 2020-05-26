@@ -15,4 +15,14 @@ class Pokemon extends Model
     protected $fillable = [
         'no', 'pic', 'name', 'types', 'stats', 'fast_attacks', 'special_attacks',
     ];
+
+    /**
+     * Get the phone record associated with the user.
+     */
+    public function stats()
+    {
+        return $this->hasOne('App\Model\Stat');
+    }
+
+
 }

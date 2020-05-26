@@ -11,6 +11,6 @@
 |
 */
 
-Route::get('export', 'PokemonController@export')->name('export');
-Route::get('importExportView', 'PokemonController@importExportView');
-Route::post('import', 'PokemonController@import')->name('import');
+Route::get('/', function () {
+    return view('welcome');
+});

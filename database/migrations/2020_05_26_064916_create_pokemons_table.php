@@ -20,8 +20,8 @@ class CreatePokemonsTable extends Migration
             $table->string('name');
             $table->string('types');//Define types : Grass, Poison
             $table->string('stats');
-            $table->string('fast_attacks');
-            $table->string('special_attacks');
+            $table->text('fast_attacks');
+            $table->text('special_attacks');
             $table->timestamps();
         });
     }

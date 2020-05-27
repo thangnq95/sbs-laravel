@@ -177,6 +177,7 @@ return [
 
         App\Providers\ViewServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        NotificationChannels\Discord\DiscordServiceProvider::class,
     ],
 
     /*

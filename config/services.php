@@ -33,5 +33,9 @@ return [
     'sparkpost' => [
         'secret' => env('SPARKPOST_SECRET'),
     ],
+    // config/services.php
+    'discord' => [
+        'token' => 'DISCORD_TOKEN',
+    ],
 
 ];

@@ -13,7 +13,7 @@ class PokemonRegistration extends Model
      * @var array
      */
     protected $fillable = [
-        'no', 'user_id', 'no', 'channel'
+        'no', 'user_id', 'channel'
     ];
 
 

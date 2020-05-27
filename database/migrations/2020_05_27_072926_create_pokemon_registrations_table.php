@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePokemonRegistationsTable extends Migration
+class CreatePokemonRegistrationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,9 +15,10 @@ class CreatePokemonRegistationsTable extends Migration
     {
         Schema::create('pokemon_registrations', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('user_id');
             $table->string('no',5);
-            $table->string('channel');
+            $table->string('discord_user_id');
+            $table->string('channel_id');
+            $table->string('channel_name',50);
             $table->timestamps();
         });
     }

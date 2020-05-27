@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
+use Illuminate\Support\Str;
+use App\Jobs\SendWelcomeEmail;
+use Illuminate\Support\Carbon;
+
 class RegisterController extends Controller
 {
     /*
@@ -63,10 +67,13 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'api_token' => Str::random(60),
         ]);
+        SendWelcomeEmail::dispatch($user)->delay(Carbon::now()->addMinutes(1));
+        return $user;
     }
 }

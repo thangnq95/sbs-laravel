@@ -171,10 +171,11 @@ return [
          */
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
+        App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        //Add
         App\Providers\ViewServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         NotificationChannels\Discord\DiscordServiceProvider::class,

@@ -48,4 +48,15 @@ class Handler extends ExceptionHandler
     {
         return parent::render($request, $exception);
     }
+    /**
+     * Get the default context variables for logging.
+     *
+     * @return array
+     */
+    protected function context()
+    {
+        return array_merge(parent::context(), [
+            'foo' => 'bar',
+        ]);
+    }
 }

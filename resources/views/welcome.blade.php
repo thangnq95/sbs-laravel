@@ -93,6 +93,9 @@
                     <a href="https://forge.laravel.com">Forge</a>
                     <a href="https://github.com/laravel/laravel">GitHub</a>
                 </div>
+                Hello, {{ isset($name)?$name:"" }}
+                <br/>
+                The current UNIX timestamp is {{ time() }}.
             </div>
         </div>
     </body>

@@ -2,27 +2,45 @@
 
 namespace App\Http\Controllers;
 
+use App\Model\Country;
+use App\Model\Supplier;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
+    /**
+     * Show a list of all of the application's users.
+     *
+     * @return Response
+     */
+    public function index()
+    {
+        $country = Country::find(1);
+
+        dd($country->posts);
+        die();
+    }
     /**
      * Show the profile for the given user.
      *
      * @param int $id
      * @return View
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        return view('user.profile', ['user' => $id]);
-//        return view('user.profile', ['user' => User::findOrFail($id)]);
+        $request->session()->put('key', 'value');
+        $request->session()->flash('status', 'Task was successful!');
+        $data = $request->session()->all();
+        var_dump($data);
     }
 
 
     /**
-     * Update a user.
+     * Dump basic request with assume update a user.
      *
      * @param Request $request
      * @param int $id
@@ -30,7 +48,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //Testing with url : http://localhost:8000/user/2?name=Thang
+        //Testing with url : http://localhost:8000/basic/request/2?name=Thang
         //Request Path & Method
         $uri = $request->path();
         if ($request->is('user/*')) {
@@ -70,6 +88,17 @@ class UserController extends Controller
 
     public function profile()
     {
+        Log::info('Showing user profile for user: 1111111');
         return view('profile', ['user' => 1111111]);
+    }
+
+    public function exampleUrlGeneration()
+    {
+        var_dump(url("/posts/1"));
+        var_dump(url()->current());
+        var_dump(url()->full());
+        var_dump(url()->previous());
+        var_dump(route('post.show', ['post' => 1]));
+        var_dump(route('comment.show', ['post' => 1, 'comment' => 3]));
     }
 }

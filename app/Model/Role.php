@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Model;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Role extends Model
+{
+    /**
+     * The users that belong to the role.
+     */
+    public function users()
+    {
+        return $this->belongsToMany('App\User')->withPivot([
+            'created_by',
+            'updated_by'
+        ]);
+    }
+}

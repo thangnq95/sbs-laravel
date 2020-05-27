@@ -13,7 +13,7 @@ class CreatePokemonRegistationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('pokemon_registations', function (Blueprint $table) {
+        Schema::create('pokemon_registrations', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('user_id');
             $table->string('no',5);

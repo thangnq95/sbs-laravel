@@ -4,9 +4,9 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PokemonRegistation extends Model
+class PokemonRegistration extends Model
 {
-    protected $table = 'pokemon_registations';
+    protected $table = 'pokemon_registrations';
     /**
      * The attributes that are mass assignable.
      *

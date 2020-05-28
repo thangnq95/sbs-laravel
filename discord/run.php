@@ -10,7 +10,10 @@ use Discord\DiscordCommandClient;
 $discord = new DiscordCommandClient([
 //    'token' => env('DISCORD_TOKEN'),
     'token' => 'NzE0NjgyOTQwMjk4MzYyOTAw.Xs4tBQ.QXvCUpoxFZ2heZimEh6HfrrCHE0',
-    'discordOptions' => (['loggerLevel' => 'INFO']),
+    'discordOptions' => [
+        'loggerLevel' => 'INFO',
+        'disabledEvents' => ['PRESENCE_UPDATE'],
+    ],
 ]);
 
 $discord->on('ready', function ($discord) {

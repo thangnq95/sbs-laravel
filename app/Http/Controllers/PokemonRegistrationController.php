@@ -26,11 +26,14 @@ class PokemonRegistrationController extends Controller
         }
         $pokemon = Pokemon::where($column, $nameOrNo)->first();
         if ($pokemon) {
-            $pokemonRegistration = new PokemonRegistration();
-            $pokemonRegistration->no = $pokemon->no;
+            $pokemonRegistration = PokemonRegistration::firstOrNew(
+                [
+                    'no' => $pokemon->no,
+                    'discord_user_id' => $request->get('discord_user_id'),
+                    'channel_id' => $request->get('channel_id')
+                ]
+            );
             $pokemonRegistration->name = $pokemon->name;
-            $pokemonRegistration->discord_user_id = $request->get('discord_user_id');
-            $pokemonRegistration->channel_id = $request->get('channel_id');
             $pokemonRegistration->channel_name = $request->get('channel_name');
             $pokemonRegistration->save();
             $pokemonRegistration->notify(new PokemonRegistrationNotification($pokemonRegistration, "Message test!"));

@@ -17,13 +17,12 @@ class PokemonRegistration extends Model
      * @var array
      */
     protected $fillable = [
-        'no', 'discord_user_id', 'channel_id','channel_name'
+        'no', 'name', 'discord_user_id', 'channel_id', 'channel_name'
     ];
 
     public function routeNotificationForDiscord()
     {
         return app(Discord::class)->getPrivateChannel($this->discord_user_id);
-//        return $this->discord_user_id;
     }
 
 }

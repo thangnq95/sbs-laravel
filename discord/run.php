@@ -23,13 +23,12 @@ $discord->on('ready', function ($discord) {
             //Add registation
             $discordUser = $message->author->user;
             $discordChannel = $message->channel;
-            $data['user_id'] = $discordUser->id;
+            $data['discord_user_id'] = $discordUser->id;
             $data['name_or_no'] = $dataRegistration[0];
             $data['channel_id'] = $discordChannel->id;
             $data['channel_name'] = $discordChannel->name;
             $response = httpPostNonCurl($url,$data);
             $response = json_decode($response,true);
-             var_dump($response);
             //Validate message
             if ($response['success']) {
                 $messageReply = "Notification: $dataRegistration[0] on $dataRegistration[1] is registered";
@@ -42,17 +41,6 @@ $discord->on('ready', function ($discord) {
 }); //end main function ready
 
 $discord->run();
-
-//using php curl (sudo apt-get install php-curl)
-function httpPost($url, $data){
-    $curl = curl_init($url);
-    curl_setopt($curl, CURLOPT_POST, true);
-    curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data));
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    $response = curl_exec($curl);
-    curl_close($curl);
-    return $response;
-}
 
 //Non curl Method
 function httpPostNonCurl($url, $data){

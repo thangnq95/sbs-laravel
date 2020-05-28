@@ -35,7 +35,7 @@ return [
     ],
     // config/services.php
     'discord' => [
-        'token' => 'DISCORD_TOKEN',
+        'token' => env('DISCORD_TOKEN'),
     ],
 
 ];

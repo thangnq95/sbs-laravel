@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Model\Pokemon;
 use App\Model\PokemonRegistration;
+use App\Notifications\PokemonRegistrationNotification;
 use Illuminate\Http\Request;
+use NotificationChannels\Discord\Discord;
 
 class PokemonRegistrationController extends Controller
 {
@@ -30,6 +32,7 @@ class PokemonRegistrationController extends Controller
             $pokemonRegistration->channel_id = $request->get('channel_id');
             $pokemonRegistration->channel_name = $request->get('channel_name');
             $pokemonRegistration->save();
+            $pokemonRegistration->notify(new PokemonRegistrationNotification($pokemonRegistration));
             return json_encode([
                 'success' => true,
                 'data' => $pokemonRegistration

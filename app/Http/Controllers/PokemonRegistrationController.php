@@ -24,7 +24,7 @@ class PokemonRegistrationController extends Controller
         } else {
             $column = 'name';
         }
-        $pokemon = Pokemon::where($column, $nameOrNo)->first();
+        $pokemon = Pokemon::whereRaw("UPPER(`$column`) LIKE '%". strtoupper($nameOrNo)."%'")->first();
         if ($pokemon) {
             $pokemonRegistration = PokemonRegistration::firstOrNew(
                 [

@@ -15,21 +15,23 @@ class PokemonRegistrationNotification extends Notification implements ShouldQueu
     use Queueable;
 
     public $pokemonRegistration;
+    public $message;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(PokemonRegistration $pokemonRegistration)
+    public function __construct(PokemonRegistration $pokemonRegistration, $message)
     {
         $this->pokemonRegistration = $pokemonRegistration;
+        $this->message = $message;
     }
 
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
      * @return array
      */
     public function via($notifiable)
@@ -39,7 +41,7 @@ class PokemonRegistrationNotification extends Notification implements ShouldQueu
 
     public function toDiscord($notifiable)
     {
-        return DiscordMessage::create("You have been challenged to a game of ** by ****!,$notifiable");
+        return DiscordMessage::create($this->message);
     }
 
 }

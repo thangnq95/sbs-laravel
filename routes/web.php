@@ -20,5 +20,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 //Query String
 Route::group(['prefix' => 'api'],function (){
     Route::resource('posts', 'PostController');
+
     Route::resource('pokemon-registrations', 'PokemonRegistrationController');
+    Route::post('pokemon-100-appear', 'PokemonRegistrationController@pokemonAppear');
 });

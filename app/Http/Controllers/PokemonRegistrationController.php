@@ -72,22 +72,14 @@ class PokemonRegistrationController extends Controller
         $messageArray = explode(" **", $messageRaw);
         preg_match("/\s\d{0,4}/", $messageArray[3], $cp);
         $dataCountry = explode("> ", $messageArray[4]);
-        //Todo Chekc query SELECT
-        //    DISTINCT discord_user_id
-        //FROM
-        //    pokemon_go.pokemon_registrations
-        //WHERE
-        //    (`name` IS NULL
-        //        AND `channel_id` = '701624383579357265,701625607133462528')
-        //        OR (`name` LIKE '%kachu%'
-        //        AND `channel_id` = '701624383579357265,701625607133462528');
-        $pokemonRegistrations = PokemonRegistration::select(['discord_user_id'])
-            ->where(['channel_id' => IV100_ID])
-            ->orWhere('name', 'like', "%" . $pokemonName . "%")
-            ->distinct()->toSql();
+        //Todo distinct data
+        $pokemonRegistrations = PokemonRegistration::where(['channel_id' => IV100_ID])
+            ->orWhere([
+                ['name', 'like', "%" . $pokemonName . "%"],
+                ['channel_id', '<>', IV100_ID]
+            ])->get();
         var_dump($pokemonRegistrations);
         die();
-
         preg_match("/DSP.{13}/", $messageArray[1], $dsp);
         $message = "**A $pokemonName spawned in channel_id**\n";
         $message .= "**$pokemonName**\n";

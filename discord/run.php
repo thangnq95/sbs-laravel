@@ -3,7 +3,19 @@
 include __DIR__ . '/vendor/autoload.php';
 
 const HOST = 'http://127.0.0.1:8000';
-const IV100 = '701624383579357265';
+
+const IV100_ID = '701624383579357265';
+const IV100_NAME = '100iv';
+
+const IV100_LVL30_ID = '701625607133462528';
+const IV100_LVL30_NAME = '100iv-lvl30';
+
+const PVP_RANK1_ID = '705080025413845035';
+const PVP_RANK1_NAME = 'pvp-rank1-1';
+
+const CHANNEL_REGISTER_ID = '715443208112308244';
+
+const REGISTER_URL = HOST . "/api/pokemon-registrations";
 
 use Discord\DiscordCommandClient;
 
@@ -20,21 +32,39 @@ $discord->on('ready', function ($discord) {
     echo "Bot is ready.", PHP_EOL;
     // Listen for events here
     $discord->on('message', function ($message) {
-        if ($message->channel->name == 'test-notify') {
+        //Check correct channel to listen
+        if ($message->channel_id == CHANNEL_REGISTER_ID) {
             $data = [];
             $messageDetect = explode(" ", $message->content);
             $prefix = $messageDetect[0];
             $dataRegistration = explode(":", $messageDetect[1]);
             if ($prefix == '!notify') {
-                $url = HOST . "/api/pokemon-registrations";
-                //Add registation
                 $discordUser = $message->author->user;
-                $discordChannel = $message->channel;
                 $data['discord_user_id'] = $discordUser->id;
                 $data['name_or_no'] = $dataRegistration[0];
-                $data['channel_id'] = $discordChannel->id;
-                $data['channel_name'] = $discordChannel->name;
-                $response = httpPostNonCurl($url, $data);
+                switch ($dataRegistration[1]) {
+                    case IV100_NAME:
+                        {
+                            $data['channel_id'] = IV100_ID;
+                            $data['channel_name'] = IV100_NAME;
+                        }
+                        break;
+                    case IV100_LVL30_NAME:
+                        {
+                            $data['channel_id'] = IV100_LVL30_ID;
+                            $data['channel_name'] = IV100_LVL30_NAME;
+                        }
+                        break;
+                    case PVP_RANK1_NAME:
+                        {
+                            $data['channel_id'] = PVP_RANK1_ID;
+                            $data['channel_name'] = PVP_RANK1_NAME;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                $response = httpPostNonCurl(REGISTER_URL, $data);
                 $response = json_decode($response, true);
                 //Validate message
                 if ($response['success']) {
@@ -44,16 +74,43 @@ $discord->on('ready', function ($discord) {
                     $message->reply($response['message']);
                 }
             }
-        } elseif ($message->channel_id == IV100) {
-            $data = $matches = [];
-            preg_match('/\*\*\*\*(.*)\*\*\*\*/', $message->content, $matches);
-            $pokemonName = $matches[1];
-            $url = HOST . "/api/pokemon-100-appear";
-            $data = [
-                'pokemon_name' => $pokemonName,
-                'message' => $message->content,
-            ];
-            $response = httpPostNonCurl($url, $data);
+        } else {
+            switch ($message->channel_id) {
+                case IV100_ID:
+                    {
+                        $data = $matches = [];
+                        preg_match('/\*\*\*\*(.*)\*\*\*\*/', $message->content, $matches);
+                        $pokemonName = $matches[1];
+                        $url = HOST . "/api/pokemon-100-appear";
+                        $data = [
+                            'pokemon_name' => $pokemonName,
+                            'message' => $message->content,
+                        ];
+                        httpPostNonCurl($url, $data);
+                    }
+                    break;
+                case IV100_LVL30_ID:
+                    {
+                        $data = $matches = [];
+                        preg_match('/\*\*\*\*(.*)\*\*\*\*/', $message->content, $matches);
+                        $pokemonName = $matches[1];
+                        $url = HOST . "/api/pokemon-100-lvl30-appear";
+                        $data = [
+                            'pokemon_name' => $pokemonName,
+                            'message' => $message->content,
+                        ];
+                        httpPostNonCurl($url, $data);
+                    }
+                    break;
+                case PVP_RANK1_ID:
+                    {
+
+                    }
+                    break;
+                default:
+                    break;
+            }
+
         }
 
     }); //end small function with content

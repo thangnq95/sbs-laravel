@@ -23,4 +23,5 @@ Route::group(['prefix' => 'api'],function (){
 
     Route::resource('pokemon-registrations', 'PokemonRegistrationController');
     Route::post('pokemon-100-appear', 'PokemonRegistrationController@pokemonAppear');
+    Route::post('pokemon-100-lvl30-appear', 'PokemonRegistrationController@pokemonAppear');
 });

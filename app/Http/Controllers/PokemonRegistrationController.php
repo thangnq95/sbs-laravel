@@ -73,13 +73,12 @@ class PokemonRegistrationController extends Controller
         preg_match("/\s\d{0,4}/", $messageArray[3], $cp);
         $dataCountry = explode("> ", $messageArray[4]);
         //Todo distinct data
+
         $pokemonRegistrations = PokemonRegistration::where(['channel_id' => IV100_ID])
             ->orWhere([
                 ['name', 'like', "%" . $pokemonName . "%"],
-                ['channel_id', '<>', IV100_ID]
-            ])->get();
-        var_dump($pokemonRegistrations);
-        die();
+                ['channel_id',  IV100_ID]
+            ])->groupby('discord_user_id')->get();
         preg_match("/DSP.{13}/", $messageArray[1], $dsp);
         $message = "**A $pokemonName spawned in channel_id**\n";
         $message .= "**$pokemonName**\n";

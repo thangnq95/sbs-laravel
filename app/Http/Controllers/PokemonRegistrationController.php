@@ -6,9 +6,9 @@ use App\Model\Pokemon;
 use App\Model\PokemonRegistration;
 use App\Notifications\PokemonRegistrationNotification;
 use Illuminate\Http\Request;
-use NotificationChannels\Discord\Discord;
 
 const IV100_ID = '701624383579357265,701625607133462528';
+const RANK1_ID = '705080025413845035';
 
 class PokemonRegistrationController extends Controller
 {
@@ -64,20 +64,36 @@ class PokemonRegistrationController extends Controller
      * @param Request $request
      * @return false|string
      */
+    public function notifyOff(Request $request)
+    {
+        $discord_user_id = $request->get('discord_user_id');
+        $rs = PokemonRegistration::where('discord_user_id', $discord_user_id)
+            ->update(['status' => 0]);
+        return json_encode([
+            'success' => true,
+            'message' => "Notification is off."
+        ]);
+    }
+
+    /**
+     * Store a new blog post.
+     *
+     * @param Request $request
+     * @return false|string
+     */
     public function pokemonAppear(Request $request)
     {
         $pokemonName = $request->get('pokemon_name');
-        $channelId = $request->get('channel_id');
         $messageRaw = $request->get('message');
         $messageArray = explode(" **", $messageRaw);
         preg_match("/\s\d{0,4}/", $messageArray[3], $cp);
         $dataCountry = explode("> ", $messageArray[4]);
-        //Todo distinct data
 
-        $pokemonRegistrations = PokemonRegistration::where(['channel_id' => IV100_ID])
+        $pokemonRegistrations = PokemonRegistration::where(['channel_id' => RANK1_ID, 'status' => 1])
             ->orWhere([
                 ['name', 'like', "%" . $pokemonName . "%"],
-                ['channel_id',  IV100_ID]
+                ['channel_id', IV100_ID],
+                ['status' => 1],
             ])->groupby('discord_user_id')->get();
         preg_match("/DSP.{13}/", $messageArray[1], $dsp);
         $message = "**A $pokemonName spawned in channel_id**\n";
@@ -89,6 +105,31 @@ class PokemonRegistrationController extends Controller
 
         foreach ($pokemonRegistrations as $registration) {
             $registration->notify(new PokemonRegistrationNotification($registration, $message));
+        }
+        return json_encode(['success' => true]);
+    }
+
+    /**
+     * Store a new blog post.
+     *
+     * @param Request $request
+     * @return false|string
+     */
+    public function pokemonRank1Appear(Request $request)
+    {
+        $pokemonName = $request->get('pokemon_name');
+        $messageRaw = $request->get('message');
+
+        $pokemonRegistrations = PokemonRegistration::where(['channel_id' => RANK1_ID, 'status' => 1])
+            ->orWhere([
+                ['name', 'like', "%" . $pokemonName . "%"],
+                ['channel_id', RANK1_ID],
+                ['status', 1]
+            ])->groupby('discord_user_id')->get();
+
+
+        foreach ($pokemonRegistrations as $registration) {
+            $registration->notify(new PokemonRegistrationNotification($registration, $messageRaw));
         }
         return json_encode(['success' => true]);
     }

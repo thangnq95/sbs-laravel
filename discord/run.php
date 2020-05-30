@@ -22,12 +22,21 @@ $discord->on('ready', function ($discord) {
             $data = [];
             $messageDetect = explode(" ", $message->content);
             $prefix = $messageDetect[0];
-//            $dataRegistration = explode(":", $messageDetect[1]);
             if ($prefix == '!notify') {
+                $discordUser = $message->author->user;
+                $data['discord_user_id'] = $discordUser->id;
                 switch ($messageDetect[1]) {
                     case 'help':
                         {
                             reply($message, HELP_MESSAGE);
+                            return;
+                        }
+                        break;
+                    case 'off':
+                        {
+                            $response = httpPostNonCurl(NOTIFY_OFF_URL, $data);
+                            $response = json_decode($response, true);
+                            reply($message, $response['message']);
                             return;
                         }
                         break;
@@ -52,8 +61,6 @@ $discord->on('ready', function ($discord) {
                     default:
                         break;
                 }
-                $discordUser = $message->author->user;
-                $data['discord_user_id'] = $discordUser->id;
                 if (isset($data['channel_name'])) {
                     $response = httpPostNonCurl(REGISTER_URL, $data);
                     $response = json_decode($response, true);
@@ -65,28 +72,28 @@ $discord->on('ready', function ($discord) {
                     } else {
                         reply($message, $response['message']);
                     }
-                } else {
-                    reply($message, "Channel is invalid");
                 }
             }
         } else {
             switch ($message->channel_id) {
                 case IV100_ID:
                 case IV100_LVL30_ID:
-                {
-                    $data = $matches = [];
-                    preg_match('/\*\*\*\*(.*)\*\*\*\*/', $message->content, $matches);
-                    $pokemonName = $matches[1];
-                    $url = HOST . "/api/pokemon-100-appear";
-                    $data = [
-                        'pokemon_name' => $pokemonName,
-                        'message' => $message->content
-                    ];
-                    httpPostNonCurl($url, $data);
-                }
+                    {
+                        $data = $matches = [];
+                        preg_match('/\*\*\*\*(.*)\*\*\*\*/', $message->content, $matches);
+                        $pokemonName = $matches[1];
+                        $url = HOST . "/api/pokemon-100-appear";
+                        $data = [
+                            'pokemon_name' => $pokemonName,
+                            'message' => $message->content
+                        ];
+                        httpPostNonCurl($url, $data);
+                    }
+                    break;
                 case PVP_RANK1_ID:
                     {
                         var_dump($message->content);
+                        var_dump($message->embeds);
                         die();
                         $data = $matches = [];
                         preg_match('/\*\*\*\*(.*)\*\*\*\*/', $message->content, $matches);

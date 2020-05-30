@@ -14,6 +14,7 @@ const PVP_RANK1_NAME = 'pvp-rank1-1';
 const CHANNEL_REGISTER_ID = '715443208112308244';
 
 const REGISTER_URL = HOST . "/api/pokemon-registrations";
+const NOTIFY_OFF_URL = HOST . "/api/pokemon-registrations-off";
 
 const DISCORD_BOT_TOKEN = "";
 

@@ -2,6 +2,8 @@
 
 include __DIR__ . '/vendor/autoload.php';
 include 'const_variables.php';
+include 'registration.php';
+include 'common_function.php';
 
 use Discord\DiscordCommandClient;
 
@@ -18,18 +20,18 @@ $discord->on('ready', function ($discord) {
     // Listen for events here
     $discord->on('message', function ($message) {
         //Check correct channel to listen
-        if ($message->channel_id == CHANNEL_REGISTER_ID) {
-            $data = [];
+        $channel_id = $message->channel_id;
+        if ($channel_id == CHANNEL_REGISTER_ID) {
             $messageDetect = explode(" ", $message->content);
             $prefix = $messageDetect[0];
             if ($prefix == '!notify') {
+                $data = [];
                 $discordUser = $message->author->user;
                 $data['discord_user_id'] = $discordUser->id;
                 switch ($messageDetect[1]) {
                     case 'help':
                         {
                             reply($message, HELP_MESSAGE);
-                            return;
                         }
                         break;
                     case 'off':
@@ -37,7 +39,6 @@ $discord->on('ready', function ($discord) {
                             $response = httpPostNonCurl(NOTIFY_OFF_URL, $data);
                             $response = json_decode($response, true);
                             reply($message, $response['message']);
-                            return;
                         }
                         break;
                     case 'iv100':
@@ -47,6 +48,7 @@ $discord->on('ready', function ($discord) {
                             }
                             $data['channel_name'] = 'iv100';
                             $data['channel_id'] = implode(",", [IV100_ID, IV100_LVL30_ID]);
+                            sendRegisterRequest($message, $data);
                         }
                         break;
                     case 'rank1':
@@ -56,26 +58,31 @@ $discord->on('ready', function ($discord) {
                             }
                             $data['channel_name'] = 'rank1';
                             $data['channel_id'] = PVP_RANK1_ID;
+                            sendRegisterRequest($message, $data);
+                        }
+                        break;
+                    case 'iv':
+                    case 'cp':
+                    case 'level':
+                    case 'country':
+                        {
+                            //$messageDetect[2] = keyword:channel
+                            $tailMessage = explode(":", $messageDetect[2]);
+                            if (isset($messageDetect[2])) {
+                                $data['filter'] = json_encode([$messageDetect[1] => $tailMessage[0]]);//keyword
+                            }
+                            //!notify country (keyword):channel
+                            $data['channel_name'] = $tailMessage[1];//channel
+                            $data['channel_id'] = "channel_id_test";//Todo get channel_id
+                            sendRegisterRequest($message, $data);
                         }
                         break;
                     default:
                         break;
                 }
-                if (isset($data['channel_name'])) {
-                    $response = httpPostNonCurl(REGISTER_URL, $data);
-                    $response = json_decode($response, true);
-
-                    //Validate message
-                    if ($response['success']) {
-                        $messageReply = $data['channel_name'] . " is registered";
-                        reply($message, $messageReply);
-                    } else {
-                        reply($message, $response['message']);
-                    }
-                }
             }
         } else {
-            switch ($message->channel_id) {
+            switch ($channel_id) {
                 case IV100_ID:
                 case IV100_LVL30_ID:
                     {
@@ -92,51 +99,18 @@ $discord->on('ready', function ($discord) {
                     break;
                 case PVP_RANK1_ID:
                     {
-                        var_dump($message->content);
-                        var_dump($message->embeds);
-                        die();
-                        $data = $matches = [];
-                        preg_match('/\*\*\*\*(.*)\*\*\*\*/', $message->content, $matches);
-                        $pokemonName = $matches[1];
-                        $url = HOST . "/api/pokemon-rank1-appear";
-                        $data = [
-                            'pokemon_name' => $pokemonName,
-                            'message' => $message->content,
-                        ];
-                        httpPostNonCurl($url, $data);
+
                     }
                     break;
                 default:
                     break;
             }
-
         }
 
     }); //end small function with content
 }); //end main function ready
 
 $discord->run();
-
-
-//Overwrite reply function //$model->reply($message)
-function reply($message, $text)
-{
-    return $message->channel->sendMessage("{$text}\n{$message->author}");
-}
-
-//Non curl Method
-function httpPostNonCurl($url, $data)
-{
-    $options = array(
-        'http' => array(
-            'header' => "Content-type: application/x-www-form-urlencoded\r\n",
-            'method' => 'POST',
-            'content' => http_build_query($data)
-        )
-    );
-    $context = stream_context_create($options);
-    return file_get_contents($url, false, $context);
-}
 
 
 ?>

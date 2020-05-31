@@ -23,14 +23,17 @@ const HELP_MESSAGE = "\n**List of Commands**\n" .
     "Bot commands: prefix !notify\n\n" .
     "!notify help: Show all the commands\n" .
     "\n" .
-    "!notify pokemonname (keyword):channel\n" .
-    "!notify iv(1-100):channel\n" .
-    "!notify cp(1-99999):channel\n" .
-    "!notify level(1-40):channel\n" .
+    "!notify iv (1-100):channel\n" .
+    "!notify cp (1-99999):channel\n" .
+    "!notify level (1-40):channel\n" .
     "!notify country (keyword):channel\n" .
+    "\n" .
+    "!notify pokemon_name (keyword):channel\n" .
     "\n" .
     "!notify iv100 (DM all IV100 feed)\n" .
     "!notify iv100 pokemon_name(DM pokemon_name IV100 feed)\n" .
     "!notify rank1 (DM all pvp rank 1)\n" .
-    "!notify rank1 pokemon_name(DM pokemon_name pvp rank 1)\n";
+    "!notify rank1 pokemon_name(DM pokemon_name pvp rank 1)\n" .
+    "\n" .
+    "!notify off: off all notification\n";
 ?>

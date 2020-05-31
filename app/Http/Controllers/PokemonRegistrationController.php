@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Model\Country;
 use App\Model\Pokemon;
 use App\Model\PokemonRegistration;
 use App\Notifications\PokemonRegistrationNotification;
@@ -20,6 +21,9 @@ class PokemonRegistrationController extends Controller
      */
     public function store(Request $request)
     {
+        //Register for
+        //"!notify iv100 pokemon_name(DM pokemon_name IV100 feed)\n" .
+        //"!notify rank1 pokemon_name(DM pokemon_name pvp rank 1)\n" .
         if ($request->has('pokemon_name')) {
             $pokemonName = $request->get('pokemon_name');
             $pokemon = Pokemon::whereRaw("UPPER(`name`) LIKE '%" . strtoupper($pokemonName) . "%'")->first();
@@ -40,6 +44,8 @@ class PokemonRegistrationController extends Controller
                 ]);
             }
         } else {
+            //"!notify iv100 (DM all IV100 feed)\n" .
+            //"!notify rank1 (DM all pvp rank 1)\n" .
             $pokemonRegistration = PokemonRegistration::firstOrNew(
                 [
                     'discord_user_id' => $request->get('discord_user_id'),
@@ -47,10 +53,23 @@ class PokemonRegistrationController extends Controller
                     'name' => null,
                 ]
             );
+            if ($request->has('filter')) {
+                $filter = json_decode($request->get('filter'), true);
+                if (isset($filter['country'])) {
+                    $country = Country::where('country_name', $filter['country'])->first();
+                    if ($country == null) {
+                        return json_encode([
+                            'success' => false,
+                            'data' => $filter['country'] . " can't find."
+                        ]);
+                    }
+                }
+
+            }
             $pokemonRegistration->channel_id = $request->get('channel_id');
         }
         $pokemonRegistration->save();
-        $pokemonRegistration->notify(new PokemonRegistrationNotification($pokemonRegistration, "Message test!"));
+        $pokemonRegistration->notify(new PokemonRegistrationNotification($pokemonRegistration, $request->get('channel_name') . " was registered!"));
         return json_encode([
             'success' => true,
             'data' => $pokemonRegistration
@@ -67,8 +86,9 @@ class PokemonRegistrationController extends Controller
     public function notifyOff(Request $request)
     {
         $discord_user_id = $request->get('discord_user_id');
-        $rs = PokemonRegistration::where('discord_user_id', $discord_user_id)
-            ->update(['status' => 0]);
+//        $rs = PokemonRegistration::where('discord_user_id', $discord_user_id)
+//            ->update(['status' => 0]);
+        $rs = PokemonRegistration::where('discord_user_id', $discord_user_id)->delete();
         return json_encode([
             'success' => true,
             'message' => "Notification is off."
@@ -93,7 +113,7 @@ class PokemonRegistrationController extends Controller
             ->orWhere([
                 ['name', 'like', "%" . $pokemonName . "%"],
                 ['channel_id', IV100_ID],
-                ['status' => 1],
+                ['status', 1],
             ])->groupby('discord_user_id')->get();
         preg_match("/DSP.{13}/", $messageArray[1], $dsp);
         $message = "**A $pokemonName spawned in channel_id**\n";

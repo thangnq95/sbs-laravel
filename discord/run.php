@@ -66,15 +66,15 @@ $discord->on('ready', function ($discord) {
                     case 'level':
                     case 'country':
                         {
-                            //$messageDetect[2] = keyword:channel
-                            $tailMessage = explode(":", $messageDetect[2]);
-                            if (isset($messageDetect[2])) {
-                                $data['filter'] = json_encode([$messageDetect[1] => $tailMessage[0]]);//keyword
-                            }
-                            //!notify country (keyword):channel
-                            $data['channel_name'] = $tailMessage[1];//channel
-                            $data['channel_id'] = "channel_id_test";//Todo get channel_id
-                            sendRegisterRequest($message, $data);
+//                            //$messageDetect[2] = keyword:channel
+//                            $tailMessage = explode(":", $messageDetect[2]);
+//                            if (isset($messageDetect[2])) {
+//                                $data['filter'] = json_encode([$messageDetect[1] => $tailMessage[0]]);//keyword
+//                            }
+//                            //!notify country (keyword):channel
+//                            $data['channel_name'] = $tailMessage[1];//channel
+//                            $data['channel_id'] = "channel_id_test";//Todo get channel_id
+//                            sendRegisterRequest($message, $data);
                         }
                         break;
                     default:

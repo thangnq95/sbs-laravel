@@ -135,21 +135,50 @@ class PokemonRegistrationController extends Controller
      * @param Request $request
      * @return false|string
      */
-    public function pokemonRank1Appear(Request $request)
+    public function pokemonPvpAppear(Request $request)
     {
-        $pokemonName = $request->get('pokemon_name');
         $messageRaw = $request->get('message');
-
+        $messageArray = explode(' ', str_replace("\n"," ",$messageRaw));
+        $messageArray = array_values(array_filter($messageArray,function($v) {
+            return $v != "";
+        }, 0));
         $pokemonRegistrations = PokemonRegistration::where(['channel_id' => RANK1_ID, 'status' => 1])
             ->orWhere([
-                ['name', 'like', "%" . $pokemonName . "%"],
+                ['name', 'like', "%" . $messageArray[0] . "%"],
                 ['channel_id', RANK1_ID],
                 ['status', 1]
             ])->groupby('discord_user_id')->get();
 
+        preg_match("/<:MS:705082254162002091>:.*/", $messageRaw, $cp); //Todo get moves in here
+        var_dump($cp);
+        die();
+
+        $count = count($messageArray);
+        $message = "$messageArray[0] $messageArray[1] $messageArray[2] \n";
+        $message .= "Rank $messageArray[4] $messageArray[5] $messageArray[6] $messageArray[8] \n";
+        $message .= "Stardust: $messageArray[11]  Candy: $messageArray[13] \n";
+        $message .= "🅟🅞🅚🅔🅗🅤🅑 🅟🅥🅟 \n";
+        $message .= "CP: $messageArray[17] LVL: $messageArray[19]  \n";
+        $message .= "IV: $messageArray[21] - $messageArray[23]  \n";
+        $message .= "Moves: $messageArray[25] $messageArray[26]  \n";
+        $message .= "DSP: $messageArray[28] min $messageArray[30] sec  \n";
+        $city = "";
+        $i = 32;
+        while ($messageArray[$i]){
+            if(substr($messageArray[$i],-1) != ","){
+                $city .= $messageArray[$i]." ";
+            }else{
+                $city .= $messageArray[$i];
+                break;
+            }
+            $i++;
+        }
+        $message .= $city." ".$messageArray[$count-3]." \n";;
+        $message .= $messageArray[$count-2]. $messageArray[$count-1]." \n";
+        $message .= "*************\n\n";
 
         foreach ($pokemonRegistrations as $registration) {
-            $registration->notify(new PokemonRegistrationNotification($registration, $messageRaw));
+            $registration->notify(new PokemonRegistrationNotification($registration, $message));
         }
         return json_encode(['success' => true]);
     }

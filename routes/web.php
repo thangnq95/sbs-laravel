@@ -25,5 +25,5 @@ Route::group(['prefix' => 'api'],function (){
     Route::post('pokemon-registrations-off', 'PokemonRegistrationController@notifyOff');
 
     Route::post('pokemon-100-appear', 'PokemonRegistrationController@pokemonAppear');
-    Route::post('pokemon-rank1-appear', 'PokemonRegistrationController@pokemonRank1Appear');
+    Route::post('pokemon-pvp-appear', 'PokemonRegistrationController@pokemonPvpAppear');
 });

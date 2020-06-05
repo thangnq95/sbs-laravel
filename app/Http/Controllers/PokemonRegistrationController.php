@@ -32,6 +32,7 @@ class PokemonRegistrationController extends Controller
                     [
                         'no' => $pokemon->no,
                         'discord_user_id' => $request->get('discord_user_id'),
+                        'discord_username' => $request->get('discord_username'),
                         'channel_id' => $request->get('channel_id')
                     ]
                 );

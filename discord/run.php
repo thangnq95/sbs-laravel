@@ -28,6 +28,7 @@ $discord->on('ready', function ($discord) {
                 $data = [];
                 $discordUser = $message->author->user;
                 $data['discord_user_id'] = $discordUser->id;
+                $data['discord_username'] = $discordUser->username;
                 switch ($messageDetect[1]) {
                     case 'help':
                         {
@@ -61,20 +62,40 @@ $discord->on('ready', function ($discord) {
                             sendRegisterRequest($message, $data);
                         }
                         break;
+                    case 'rank5':
+                        {
+                            if (isset($messageDetect[2])) {
+                                $data['pokemon_name'] = $messageDetect[2];
+                            }
+                            $data['channel_name'] = 'rank5';
+                            $data['channel_id'] = PVP_RANK1_ID.",".PVP_RANK5_ID;
+                            sendRegisterRequest($message, $data);
+                        }
+                    case 'rank10':
+                        {
+                            if (isset($messageDetect[2])) {
+                                $data['pokemon_name'] = $messageDetect[2];
+                            }
+                            $data['channel_name'] = 'rank10';
+                            $data['channel_id'] = PVP_RANK1_ID.",".PVP_RANK5_ID.",".PVP_RANK10_ID;
+                            sendRegisterRequest($message, $data);
+                        }
+                        break;
+                    case 'rank20':
+                        {
+                            if (isset($messageDetect[2])) {
+                                $data['pokemon_name'] = $messageDetect[2];
+                            }
+                            $data['channel_name'] = 'rank20';
+                            $data['channel_id'] = PVP_RANK1_ID.",".PVP_RANK5_ID.",".PVP_RANK10_ID.",".PVP_RANK20_ID;
+                            sendRegisterRequest($message, $data);
+                        }
+                        break;
                     case 'iv':
                     case 'cp':
                     case 'level':
                     case 'country':
                         {
-//                            //$messageDetect[2] = keyword:channel
-//                            $tailMessage = explode(":", $messageDetect[2]);
-//                            if (isset($messageDetect[2])) {
-//                                $data['filter'] = json_encode([$messageDetect[1] => $tailMessage[0]]);//keyword
-//                            }
-//                            //!notify country (keyword):channel
-//                            $data['channel_name'] = $tailMessage[1];//channel
-//                            $data['channel_id'] = "channel_id_test";//Todo get channel_id
-//                            sendRegisterRequest($message, $data);
                         }
                         break;
                     default:
@@ -86,21 +107,21 @@ $discord->on('ready', function ($discord) {
                 case IV100_ID:
                 case IV100_LVL30_ID:
                     {
-//                        $data = $matches = [];
-//                        preg_match('/\*\*\*\*(.*)\*\*\*\*/', $message->content, $matches);
-//                        $pokemonName = $matches[1];
-//                        $url = HOST . "/api/pokemon-100-appear";
-//                        $data = [
-//                            'pokemon_name' => $pokemonName,
-//                            'message' => $message->content
-//                        ];
-//                        httpPostNonCurl($url, $data);
+                        $data = $matches = [];
+                        preg_match('/\*\*\*\*(.*)\*\*\*\*/', $message->content, $matches);
+                        $pokemonName = $matches[1];
+                        $url = HOST . "/api/pokemon-100-appear";
+                        $data = [
+                            'pokemon_name' => $pokemonName,
+                            'message' => $message->content
+                        ];
+                        httpPostNonCurl($url, $data);
                     }
                     break;
                 case PVP_RANK1_ID:
-                case '705080266498244637':
-                case '717389468327477348':
-                case '717389570513174571':
+                case PVP_RANK5_ID:
+                case PVP_RANK10_ID:
+                case PVP_RANK20_ID:
                     {
                         $url = HOST . "/api/pokemon-pvp-appear";
                         $data = [

@@ -138,8 +138,8 @@ class PokemonRegistrationController extends Controller
     public function pokemonPvpAppear(Request $request)
     {
         $messageRaw = $request->get('message');
-        $messageArray = explode(' ', str_replace("\n"," ",$messageRaw));
-        $messageArray = array_values(array_filter($messageArray,function($v) {
+        $messageArray = explode(' ', str_replace("\n", " ", $messageRaw));
+        $messageArray = array_values(array_filter($messageArray, function ($v) {
             return $v != "";
         }, 0));
         $pokemonRegistrations = PokemonRegistration::where(['channel_id' => RANK1_ID, 'status' => 1])
@@ -149,10 +149,9 @@ class PokemonRegistrationController extends Controller
                 ['status', 1]
             ])->groupby('discord_user_id')->get();
 
-        preg_match("/<:MS:705082254162002091>:.*/", $messageRaw, $cp); //Todo get moves in here
-        var_dump($cp);
-        die();
-
+        preg_match("/<:MS:705082254162002091>:.*/", $messageRaw, $move);
+        preg_match("/<:DSP:703419665132814396>:.*/", $messageRaw, $dps);
+        preg_match("/sec.*\n.*/", $messageRaw, $country);
         $count = count($messageArray);
         $message = "$messageArray[0] $messageArray[1] $messageArray[2] \n";
         $message .= "Rank $messageArray[4] $messageArray[5] $messageArray[6] $messageArray[8] \n";
@@ -160,21 +159,10 @@ class PokemonRegistrationController extends Controller
         $message .= "🅟🅞🅚🅔🅗🅤🅑 🅟🅥🅟 \n";
         $message .= "CP: $messageArray[17] LVL: $messageArray[19]  \n";
         $message .= "IV: $messageArray[21] - $messageArray[23]  \n";
-        $message .= "Moves: $messageArray[25] $messageArray[26]  \n";
-        $message .= "DSP: $messageArray[28] min $messageArray[30] sec  \n";
-        $city = "";
-        $i = 32;
-        while ($messageArray[$i]){
-            if(substr($messageArray[$i],-1) != ","){
-                $city .= $messageArray[$i]." ";
-            }else{
-                $city .= $messageArray[$i];
-                break;
-            }
-            $i++;
-        }
-        $message .= $city." ".$messageArray[$count-3]." \n";;
-        $message .= $messageArray[$count-2]. $messageArray[$count-1]." \n";
+        $message .= "Moves: " . str_replace("<:MS:705082254162002091>: ", "", $move[0]) . "\n";
+        $message .= "DSP: ".str_replace("<:DSP:703419665132814396>: ", "", $dps[0])."\n";
+        $message .=  str_replace("sec\n", "", $country[0]). " \n";;
+        $message .= $messageArray[$count - 2] . $messageArray[$count - 1] . " \n";
         $message .= "*************\n\n";
 
         foreach ($pokemonRegistrations as $registration) {

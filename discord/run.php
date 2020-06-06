@@ -63,21 +63,21 @@ $discord->on('ready', function ($discord) {
                         }
                         break;
                     case 'rank5':
-                        {
-                            if (isset($messageDetect[2])) {
-                                $data['pokemon_name'] = $messageDetect[2];
-                            }
-                            $data['channel_name'] = 'rank5';
-                            $data['channel_id'] = PVP_RANK1_ID.",".PVP_RANK5_ID;
-                            sendRegisterRequest($message, $data);
+                    {
+                        if (isset($messageDetect[2])) {
+                            $data['pokemon_name'] = $messageDetect[2];
                         }
+                        $data['channel_name'] = 'rank5';
+                        $data['channel_id'] = PVP_RANK1_ID . "," . PVP_RANK5_ID;
+                        sendRegisterRequest($message, $data);
+                    }
                     case 'rank10':
                         {
                             if (isset($messageDetect[2])) {
                                 $data['pokemon_name'] = $messageDetect[2];
                             }
                             $data['channel_name'] = 'rank10';
-                            $data['channel_id'] = PVP_RANK1_ID.",".PVP_RANK5_ID.",".PVP_RANK10_ID;
+                            $data['channel_id'] = PVP_RANK1_ID . "," . PVP_RANK5_ID . "," . PVP_RANK10_ID;
                             sendRegisterRequest($message, $data);
                         }
                         break;
@@ -87,7 +87,7 @@ $discord->on('ready', function ($discord) {
                                 $data['pokemon_name'] = $messageDetect[2];
                             }
                             $data['channel_name'] = 'rank20';
-                            $data['channel_id'] = PVP_RANK1_ID.",".PVP_RANK5_ID.",".PVP_RANK10_ID.",".PVP_RANK20_ID;
+                            $data['channel_id'] = PVP_RANK1_ID . "," . PVP_RANK5_ID . "," . PVP_RANK10_ID . "," . PVP_RANK20_ID;
                             sendRegisterRequest($message, $data);
                         }
                         break;
@@ -105,15 +105,28 @@ $discord->on('ready', function ($discord) {
         } else {
             switch ($channel_id) {
                 case IV100_ID:
+                {
+                    $matches = [];
+                    preg_match('/\*\*\*\*(.*)\*\*\*\*/', $message->content, $matches);
+                    $pokemonName = $matches[1];
+                    $url = HOST . "/api/pokemon-100-appear";
+                    $data = [
+                        'pokemon_name' => $pokemonName,
+                        'message' => $message->content,
+                        'channel_id' => IV100_ID
+                    ];
+                    httpPostNonCurl($url, $data);
+                }
                 case IV100_LVL30_ID:
                     {
-                        $data = $matches = [];
+                        $matches = [];
                         preg_match('/\*\*\*\*(.*)\*\*\*\*/', $message->content, $matches);
                         $pokemonName = $matches[1];
                         $url = HOST . "/api/pokemon-100-appear";
                         $data = [
                             'pokemon_name' => $pokemonName,
-                            'message' => $message->content
+                            'message' => $message->content,
+                            'channel_id' => IV100_LVL30_ID
                         ];
                         httpPostNonCurl($url, $data);
                     }
@@ -125,8 +138,10 @@ $discord->on('ready', function ($discord) {
                     {
                         $url = HOST . "/api/pokemon-pvp-appear";
                         $data = [
-                            'message' => $message->content
+                            'message' => $message->content,
+                            'channel_id' => $channel_id
                         ];
+                        var_dump($message->content);
                         httpPostNonCurl($url, $data);
                     }
                     break;

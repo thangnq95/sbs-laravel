@@ -13,7 +13,9 @@ use Illuminate\Support\Facades\DB;
 class PokemonController extends Controller
 {
     /**
-     * @return \Illuminate\Support\Collection
+     * Show the import view.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
      */
     public function importExportView()
     {

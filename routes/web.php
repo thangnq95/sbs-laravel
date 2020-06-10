@@ -13,17 +13,12 @@
 use Illuminate\Http\Request;
 use App\Events\TaskEvent;
 
-Auth::routes(['verify' => true]);
-
-Route::get('/home', 'HomeController@index')->name('home');
 
 //Query String
 Route::group(['prefix' => 'api'],function (){
-    Route::resource('posts', 'PostController');
-
     Route::resource('pokemon-registrations', 'PokemonRegistrationController');
     Route::post('pokemon-registrations-off', 'PokemonRegistrationController@notifyOff');
-
-    Route::post('pokemon-100-appear', 'PokemonRegistrationController@pokemonAppear');
+   
+    Route::post('pokemon-appear', 'PokemonRegistrationController@pokemonAppear');
     Route::post('pokemon-pvp-appear', 'PokemonRegistrationController@pokemonPvpAppear');
 });

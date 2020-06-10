@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddFilterToPokemonRegistrationsTable extends Migration
+class AddSomeFieldsIntoPokemonRegistrationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,10 @@ class AddFilterToPokemonRegistrationsTable extends Migration
     public function up()
     {
         Schema::table('pokemon_registrations', function (Blueprint $table) {
-            $table->string('filter', 50)->after('channel_name')->default(null);
+            $table->string('country', 50)->after('pokemon_name')->default(null);
+            $table->integer('iv')->after('country')->default(null);
+            $table->integer('cp')->after('iv')->default(null);
+            $table->integer('level')->after('cp')->default(null);
         });
     }
 
@@ -25,8 +28,6 @@ class AddFilterToPokemonRegistrationsTable extends Migration
      */
     public function down()
     {
-        Schema::table('pokemon_registrations', function (Blueprint $table) {
-            //
-        });
+        //
     }
 }

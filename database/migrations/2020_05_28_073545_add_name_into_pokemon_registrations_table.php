@@ -14,7 +14,7 @@ class AddNameIntoPokemonRegistrationsTable extends Migration
     public function up()
     {
         Schema::table('pokemon_registrations', function (Blueprint $table) {
-            $table->string('name',50)->after('no')->default(null);
+            $table->string('pokemon_name',50)->after('channel_id')->default(null);
         });
     }
 

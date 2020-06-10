@@ -11,16 +11,11 @@ function reply($message, $text)
 function sendRegisterRequest($message, $data)
 {
     if (isset($data['channel_name'])) {
-        $response = httpPostNonCurl(REGISTER_URL, $data);
+        $response = httpPostNonCurl(URL_LIST['register'], $data);
         $response = json_decode($response, true);
 
         //Validate message
-        if ($response['success']) {
-            $messageReply = $data['channel_name'] . " is registered";
-            reply($message, $messageReply);
-        } else {
-            reply($message, $response['message']);
-        }
+        reply($message, $response['message']);
     }
 }
 

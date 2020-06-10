@@ -2,7 +2,6 @@
 
 include __DIR__ . '/vendor/autoload.php';
 include 'const_variables.php';
-include 'registration.php';
 include 'common_function.php';
 
 use Discord\DiscordCommandClient;
@@ -21,7 +20,7 @@ $discord->on('ready', function ($discord) {
     $discord->on('message', function ($message) {
         //Check correct channel to listen
         $channel_id = $message->channel_id;
-        if ($channel_id == CHANNEL_REGISTER_ID) {
+        if ($channel_id == CHANNEL_LIST['register']) {
             $messageDetect = explode(" ", $message->content);
             $prefix = $messageDetect[0];
             if ($prefix == '!notify') {
@@ -32,70 +31,44 @@ $discord->on('ready', function ($discord) {
                 switch ($messageDetect[1]) {
                     case 'help':
                         {
-                            reply($message, HELP_MESSAGE);
+                            reply($message, MESSAGE_LIST['help']);
                         }
                         break;
                     case 'off':
                         {
-                            $response = httpPostNonCurl(NOTIFY_OFF_URL, $data);
+                            $response = httpPostNonCurl(URL_LIST['notify'], $data);
                             $response = json_decode($response, true);
                             reply($message, $response['message']);
                         }
                         break;
                     case 'iv100':
                         {
-                            if (isset($messageDetect[2])) {
-                                $data['pokemon_name'] = $messageDetect[2];
+                            for ($i = 2; $i < count($messageDetect); $i++) {
+                                $filterDataRaw = explode(":", $messageDetect[$i]);
+                                if (count($filterDataRaw) == 2) {
+                                    $data[$filterDataRaw[0]] = $filterDataRaw[1];
+                                }
                             }
-                            $data['channel_name'] = 'iv100';
-                            $data['channel_id'] = implode(",", [IV100_ID, IV100_LVL30_ID]);
+                            $data['channel_name'] = $messageDetect[1];
+                            $data['channel_id'] = CHANNEL_LIST['iv100'] . "," . CHANNEL_LIST['iv100_lvl_30'];
                             sendRegisterRequest($message, $data);
                         }
                         break;
                     case 'rank1':
+                    case 'rank2-5':
+                    case 'rank6-10':
+                    case 'rank11-20':
+                    case 'cp-2500':
                         {
-                            if (isset($messageDetect[2])) {
-                                $data['pokemon_name'] = $messageDetect[2];
+                            for ($i = 2; $i < count($messageDetect); $i++) {
+                                $filterDataRaw = explode(":", $messageDetect[$i]);
+                                if (count($filterDataRaw) == 2) {
+                                    $data[$filterDataRaw[0]] = $filterDataRaw[1];
+                                }
                             }
-                            $data['channel_name'] = 'rank1';
-                            $data['channel_id'] = PVP_RANK1_ID;
+                            $data['channel_name'] = $messageDetect[1];
+                            $data['channel_id'] = CHANNEL_LIST[$messageDetect[1]];
                             sendRegisterRequest($message, $data);
-                        }
-                        break;
-                    case 'rank5':
-                    {
-                        if (isset($messageDetect[2])) {
-                            $data['pokemon_name'] = $messageDetect[2];
-                        }
-                        $data['channel_name'] = 'rank5';
-                        $data['channel_id'] = PVP_RANK1_ID . "," . PVP_RANK5_ID;
-                        sendRegisterRequest($message, $data);
-                    }
-                    case 'rank10':
-                        {
-                            if (isset($messageDetect[2])) {
-                                $data['pokemon_name'] = $messageDetect[2];
-                            }
-                            $data['channel_name'] = 'rank10';
-                            $data['channel_id'] = PVP_RANK1_ID . "," . PVP_RANK5_ID . "," . PVP_RANK10_ID;
-                            sendRegisterRequest($message, $data);
-                        }
-                        break;
-                    case 'rank20':
-                        {
-                            if (isset($messageDetect[2])) {
-                                $data['pokemon_name'] = $messageDetect[2];
-                            }
-                            $data['channel_name'] = 'rank20';
-                            $data['channel_id'] = PVP_RANK1_ID . "," . PVP_RANK5_ID . "," . PVP_RANK10_ID . "," . PVP_RANK20_ID;
-                            sendRegisterRequest($message, $data);
-                        }
-                        break;
-                    case 'iv':
-                    case 'cp':
-                    case 'level':
-                    case 'country':
-                        {
                         }
                         break;
                     default:
@@ -103,50 +76,32 @@ $discord->on('ready', function ($discord) {
                 }
             }
         } else {
+            $url = "";
             switch ($channel_id) {
-                case IV100_ID:
-                {
-                    $matches = [];
-                    preg_match('/\*\*\*\*(.*)\*\*\*\*/', $message->content, $matches);
-                    $pokemonName = $matches[1];
-                    $url = HOST . "/api/pokemon-100-appear";
-                    $data = [
-                        'pokemon_name' => $pokemonName,
-                        'message' => $message->content,
-                        'channel_id' => IV100_ID
-                    ];
-                    httpPostNonCurl($url, $data);
-                }
-                case IV100_LVL30_ID:
+                case CHANNEL_LIST['iv100']:
+                case CHANNEL_LIST['iv100_lvl_30']:
+                case CHANNEL_LIST['cp-2500']:
                     {
-                        $matches = [];
-                        preg_match('/\*\*\*\*(.*)\*\*\*\*/', $message->content, $matches);
-                        $pokemonName = $matches[1];
-                        $url = HOST . "/api/pokemon-100-appear";
-                        $data = [
-                            'pokemon_name' => $pokemonName,
-                            'message' => $message->content,
-                            'channel_id' => IV100_LVL30_ID
-                        ];
-                        httpPostNonCurl($url, $data);
+                        $url = URL_LIST['appear'];
                     }
                     break;
-                case PVP_RANK1_ID:
-                case PVP_RANK5_ID:
-                case PVP_RANK10_ID:
-                case PVP_RANK20_ID:
+                case CHANNEL_LIST['rank1']:
+                case CHANNEL_LIST['rank2-5']:
+                case CHANNEL_LIST['rank6-10']:
+                case CHANNEL_LIST['rank11-20']:
                     {
-                        $url = HOST . "/api/pokemon-pvp-appear";
-                        $data = [
-                            'message' => $message->content,
-                            'channel_id' => $channel_id
-                        ];
-                        var_dump($message->content);
-                        httpPostNonCurl($url, $data);
+                        $url = URL_LIST['pvp-appear'];
                     }
                     break;
                 default:
                     break;
+            }
+            if ($url != "") {
+                $data = [
+                    'message' => $message->content,
+                    'channel_id' => $channel_id
+                ];
+                httpPostNonCurl($url, $data);
             }
         }
 

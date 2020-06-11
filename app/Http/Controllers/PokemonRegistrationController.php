@@ -101,18 +101,22 @@ class PokemonRegistrationController extends Controller
         $pokemonName = $matches[1];
         $channelId = $request->get('channel_id');
         $messageArray = explode(" **", $messageRaw);
-        preg_match("/\s\d{0,4}/", $messageArray[3], $cp);
+        preg_match("/\s\d{0,4}/", $messageArray[3], $cpData);
         $dataCountry = explode("> ", $messageArray[4]);
 
-        $pokemonRegistrations = $this->getListRegistration($channelId, $pokemonName);
         preg_match("/DSP.{13}/", $messageArray[1], $dsp);
+        $cp = $cpData[0];
+        $level = str_replace("*", "", $dataCountry[1]);
+        $country = $dataCountry[2];
+
         $message = "**A $pokemonName spawned!!**\n";
         $message .= "**$pokemonName**\n";
         $message .= $dsp[0] . "\n";
-        $message .= "**IV** 100 (15/15/15) ** CP:** $cp[0] ** Level:** " . str_replace("*", "", $dataCountry[1]);
-        $message .= "**Country:** $dataCountry[2]";
+        $message .= "**IV** 100 (15/15/15) ** CP:** $cp ** Level:** " . $level;
+        $message .= "**Country:** $country";
         $message .= "```" . str_replace("✰", "", $dataCountry[3]) . "``` \n";
 
+        $pokemonRegistrations = $this->getListRegistration($channelId, $pokemonName, 100, $cp, $level, $country);
         foreach ($pokemonRegistrations as $registration) {
             $registration->notify(new PokemonRegistrationNotification($registration, $message));
         }
@@ -138,7 +142,6 @@ class PokemonRegistrationController extends Controller
             return $v != "";
         }, 0));
         $pokemonName = $messageArray[0];
-        $pokemonRegistrations = $this->getListRegistration($channelId, $pokemonName);
 
         preg_match("/Rank.*/", $messageRaw, $rank);
         preg_match("/<:CP:705082200583831582> .*/", $messageRaw, $currentCP);
@@ -150,7 +153,8 @@ class PokemonRegistrationController extends Controller
         preg_match("/<:IV:705082225066115142>:.*/", $messageRaw, $iv);
         preg_match("/<:CP:705082200583831582>:.*\d /", $messageRaw, $cp);
         preg_match("/<:LVL:705082168598200331>:.*/", $messageRaw, $lvl);
-        preg_match("/sec.*\n.*/", $messageRaw, $country);
+        preg_match("/sec.*\n.*/", $messageRaw, $countryData);
+        $country = str_replace("sec\n", "", $countryData[0]);
         $count = count($messageArray);
         $message = "$messageArray[0] $messageArray[1] $messageArray[2] \n";
         $rankArray = explode(' ', $rank[0]);
@@ -161,22 +165,26 @@ class PokemonRegistrationController extends Controller
         $message .= "IV: " . str_replace("<:IV:705082225066115142>: ", "", $iv[0]) . "  \n";
         $message .= "Moves: " . str_replace("<:MS:705082254162002091>: ", "", $move[0]) . "\n";
         $message .= "DSP: " . str_replace("<:DSP:703419665132814396>: ", "", $dps[0]) . "\n";
-        $message .= str_replace("sec\n", "", $country[0]) . " \n";;
+        $message .= $country . " \n";;
         $message .= $messageArray[$count - 2] . $messageArray[$count - 1] . " \n";
 
+        $pokemonRegistrations = $this->getListRegistration($channelId, $pokemonName, $iv[0], $cp[0], $lvl[0], $country);
         foreach ($pokemonRegistrations as $registration) {
             $registration->notify(new PokemonRegistrationNotification($registration, $message));
         }
         return json_encode(['success' => true]);
     }
 
-    function getListRegistration($channelId, $pokemonName)
+    function getListRegistration($channelId, $pokemonName, $iv, $cp, $level, $country)
     {
-        return PokemonRegistration::where([['channel_id', 'like', "%" . $channelId . "%"], ['pokemon_name', 'is', null], ['status', 1]])
-            ->orWhere([
-                ['pokemon_name', 'like', "%" . $pokemonName . "%"],
-                ['channel_id', 'like', "%" . $channelId . "%"],
-                ['status', 1],
-            ])->groupby('discord_user_id')->get();
+        return PokemonRegistration::where([
+            ['channel_id', 'like', "%" . $channelId . "%"],
+            ['pokemon_name', 'like', "%" . $pokemonName . "%"],
+            ['iv', '>=', $iv],
+            ['cp', '>=', $cp],
+            ['lvl', '>=', $level],
+            ['country', 'like', "%" . $country . "%"],
+            ['status', 1]
+        ])->groupby('discord_user_id')->get();
     }
 }

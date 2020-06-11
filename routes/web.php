@@ -18,7 +18,8 @@ use App\Events\TaskEvent;
 Route::group(['prefix' => 'api'],function (){
     Route::resource('pokemon-registrations', 'PokemonRegistrationController');
     Route::post('pokemon-registrations-off', 'PokemonRegistrationController@notifyOff');
-   
+    Route::post('pokemon-registrations-list', 'PokemonRegistrationController@notifyList');
+
     Route::post('pokemon-appear', 'PokemonRegistrationController@pokemonAppear');
     Route::post('pokemon-pvp-appear', 'PokemonRegistrationController@pokemonPvpAppear');
 });

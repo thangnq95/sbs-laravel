@@ -16,28 +16,32 @@ const CHANNEL_LIST = [
 const URL_LIST = [
     'register' => HOST . "/api/pokemon-registrations",
     'notify' => HOST . "/api/pokemon-registrations-off",
+    'list' => HOST . "/api/pokemon-registrations-list",
     'appear' => HOST . "/api/pokemon-appear",
     'pvp-appear' => HOST . "/api/pokemon-pvp-appear"
 ];
 
 const MESSAGE_LIST = [
-    'help' => "\n**List of Commands**\n" .
+    'help_new' => "\n**LIST OF COMMANDS**\n" .
         "Bot commands: prefix !notify\n\n" .
-        "!notify help: Show all the commands\n" .
+        "!notify help: Show all the commands\n\n" .
+        "!notify channel_name filter1:value1 filter2:value2 .. filterN:valueN\n\n" .
+        "**CURRENT CHANNEL LIST**\n" .
+        "iv100 | rank1 | rank2-5 | rank6-10 | rank11-20 | cp-2500 \n\n" .
+        "**FILTER LIST**\n" .
+        "pokemon_name: | iv: | cp: | level: | country: \n\n" .
+        "**EXAMPLES**\n" .
+        "● !notify iv100\n" .
+        "● !notify iv100 pokemon_name:Stunfisk\n" .
+        "● !notify iv100 pokemon_name:Stunfisk country:Vietnam level:20\n" .
+        "● !notify iv100 pokemon_name:Stunfisk country:Vietnam level:20 cp:200\n\n" .
+
+        "● IV is invalid in iv100 channel\n" .
+        "● Only 1 filter / channel\n" .
         "\n" .
-        "!notify iv (1-100):channel\n" .
-        "!notify cp (1-99999):channel\n" .
-        "!notify level (1-40):channel\n" .
-        "!notify country (keyword):channel\n" .
+        "**!notify list**: To list all notifications\n" .
         "\n" .
-        "!notify pokemon_name (keyword):channel\n" .
-        "\n" .
-        "!notify iv100 (DM all IV100 feed)\n" .
-        "!notify iv100 pokemon_name(DM pokemon_name IV100 feed)\n" .
-        "!notify rank1 (DM all pvp rank 1)\n" .
-        "!notify rank1 pokemon_name(DM pokemon_name pvp rank 1)\n" .
-        "\n" .
-        "!notify off: off all notification\n",
+        "**!notify off**: Turn off all notification\n",
 ];
 
 

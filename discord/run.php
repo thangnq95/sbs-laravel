@@ -28,10 +28,18 @@ $discord->on('ready', function ($discord) {
                 $discordUser = $message->author->user;
                 $data['discord_user_id'] = $discordUser->id;
                 $data['discord_username'] = $discordUser->username;
+
                 switch ($messageDetect[1]) {
                     case 'help':
                         {
-                            reply($message, MESSAGE_LIST['help']);
+                            reply($message, MESSAGE_LIST['help_new']);
+                        }
+                        break;
+                    case 'list':
+                        {
+                            $response = httpPostNonCurl(URL_LIST['list'], $data);
+                            $response = json_decode($response, true);
+                            reply($message, $response['message']);
                         }
                         break;
                     case 'off':

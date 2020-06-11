@@ -52,12 +52,11 @@ class PokemonRegistrationController extends Controller
                 ]
             );
             $pokemonRegistration->channel_name = $channelName;
-            $pokemonRegistration->channel_name = isset($pokemon->pokemon_name) ? $pokemon->pokemon_name : null;
             $pokemonRegistration->no = isset($pokemon->no) ? $pokemon->no : null;
-            $pokemonRegistration->country = isset($country->name) ? $country->name : null;
-            $pokemonRegistration->iv = ($request->has('iv')) ? $request->get('iv') : null;
-            $pokemonRegistration->cp = ($request->has('cp')) ? $request->get('cp') : null;
-            $pokemonRegistration->level = ($request->has('level')) ? $request->get('level') : null;
+            $pokemonRegistration->country = isset($country->name) ? $country->name : "";
+            $pokemonRegistration->iv = ($request->has('iv')) ? $request->get('iv') : 0;
+            $pokemonRegistration->cp = ($request->has('cp')) ? $request->get('cp') : 0;
+            $pokemonRegistration->level = ($request->has('level')) ? $request->get('level') : 0;
 
             $messageReply = $channelName . " was registered!";
 

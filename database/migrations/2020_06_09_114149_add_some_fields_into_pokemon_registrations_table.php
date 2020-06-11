@@ -14,10 +14,10 @@ class AddSomeFieldsIntoPokemonRegistrationsTable extends Migration
     public function up()
     {
         Schema::table('pokemon_registrations', function (Blueprint $table) {
-            $table->string('country', 50)->after('pokemon_name')->default(null);
-            $table->integer('iv')->after('country')->default(null);
-            $table->integer('cp')->after('iv')->default(null);
-            $table->integer('level')->after('cp')->default(null);
+            $table->string('country', 50)->after('pokemon_name')->default("");
+            $table->integer('iv')->after('country')->default(0);
+            $table->integer('cp')->after('iv')->default(0);
+            $table->integer('level')->after('cp')->default(0);
         });
     }
 

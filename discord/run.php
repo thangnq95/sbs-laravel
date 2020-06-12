@@ -62,6 +62,14 @@ $discord->on('ready', function ($discord) {
                             sendRegisterRequest($message, $data);
                         }
                         break;
+                    case 'iv90':
+                    case 'ultra-rare':
+                    case 'ditto-master':
+                    case 'gen1':
+                    case 'gen2':
+                    case 'gen3':
+                    case 'gen4':
+                    case 'gen5':
                     case 'rank1':
                     case 'rank2-5':
                     case 'rank6-10':
@@ -88,6 +96,14 @@ $discord->on('ready', function ($discord) {
             switch ($channel_id) {
                 case CHANNEL_LIST['iv100']:
                 case CHANNEL_LIST['iv100_lvl_30']:
+                case CHANNEL_LIST['iv90']:
+                case CHANNEL_LIST['ultra-rare']:
+                case CHANNEL_LIST['ditto-master']:
+                case CHANNEL_LIST['gen1']:
+                case CHANNEL_LIST['gen2']:
+                case CHANNEL_LIST['gen3']:
+                case CHANNEL_LIST['gen4']:
+                case CHANNEL_LIST['gen5']:
                 case CHANNEL_LIST['cp-2500']:
                     {
                         $url = URL_LIST['appear'];

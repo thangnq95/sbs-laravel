@@ -7,6 +7,13 @@ const CHANNEL_LIST = [
     'iv100' => '701624383579357265',
     'iv100_lvl_30' => '701625607133462528',
     'iv90' => '701640369871388713',
+    'ultra-rare' => '701640141520896000',
+    'ditto-master' => '701626291056541737',
+    'gen1' => '701640503459840031',
+    'gen2' => '701626291056541737',
+    'gen3' => '701640619600117761',
+    'gen4' => '701640717059096576',
+    'gen5' => '701640774789365820',
     'rank1' => '705080025413845035',
     'rank2-5' => '705080266498244637',
     'rank6-10' => '717389468327477348',
@@ -27,7 +34,8 @@ const MESSAGE_LIST = [
         "!notify help: Show all the commands\n\n" .
         "!notify channel_name filter1:value1 filter2:value2 .. filterN:valueN\n\n" .
         "**CURRENT CHANNEL LIST**\n" .
-        "iv100 | rank1 | rank2-5 | rank6-10 | rank11-20 | cp-2500 \n\n" .
+        "iv100 | iv90 | ultra-rare | ditto-master | gen1 | gen2 | gen3 | gen4 | gen5 | cp-2500\n".
+        "rank1 | rank2-5 | rank6-10 | rank11-20\n\n" .
         "**FILTER LIST**\n" .
         "pokemon_name: | iv: | cp: | level: | country: \n\n" .
         "**EXAMPLES**\n" .

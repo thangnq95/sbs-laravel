@@ -61,7 +61,7 @@ class PokemonRegistrationController extends Controller
             $pokemonRegistration->level = ($request->has('level')) ? $request->get('level') : 0;
 
             $messageReply = "";
-            $messageReply .= ($pokemonRegistration->pokemon_name != "") ?  $pokemonRegistration->pokemon_name . " " : "";
+            $messageReply .= ($pokemonRegistration->pokemon_name != "") ? $pokemonRegistration->pokemon_name . " " : "";
             $messageReply .= ($pokemonRegistration->channel_name != "") ? strtoupper($pokemonRegistration->channel_name) . " | " : "";
             $messageReply .= ($pokemonRegistration->country != "") ? "Country: " . strtoupper($pokemonRegistration->country) . " | " : "";
             $messageReply .= ($pokemonRegistration->iv != 0) ? strtoupper("IV " . $pokemonRegistration->iv) . " | " : "";
@@ -146,16 +146,24 @@ class PokemonRegistrationController extends Controller
         $cp = $cpData[0];
         $level = str_replace("*", "", $dataCountry[1]);
         $country = $dataCountry[2];
+        $iv = str_replace("<:Iv:633407396655529994> ", "", $messageArray[2]);
+        $iv = str_replace("*", "", $iv);
 
         $message = "**A $pokemonName spawned!!**\n";
         $message .= "**$pokemonName**\n";
         $message .= $dsp[0] . "\n";
-        $message .= "**IV** 100 (15/15/15) ** CP:** $cp ** Level:** " . $level;
+        $message .= "**IV** $iv ** CP:** $cp ** Level:** " . $level;
         $message .= "**Country:** $country";
         $message .= "```" . str_replace("✰", "", $dataCountry[3]) . "``` ";
         $message .= "BY: 🅟🅞🅚🅔🅗🅤🅑\n";
         $message .= "--------------------------------------------\n";
-
+        preg_match("/\(.{5}/", $dsp[0], $dpsData);
+        $dpsData = str_replace("(", "", $dpsData[0]);
+        $dpsData = explode(":", $dpsData);
+        $dpsValue = $dpsData[0] * 60 + $dpsData[1];
+        if ($dpsValue < 60 * 3) {
+            return json_encode(['success' => true]);
+        }
         $pokemonRegistrations = $this->getListRegistration($channelId, $pokemonName, 100, $cp, $level, $country);
 
         foreach ($pokemonRegistrations as $registration) {
@@ -203,6 +211,12 @@ class PokemonRegistrationController extends Controller
         $cp = str_replace("<:CP:705082200583831582>: ", "", $cpData[0]);
         $lvl = str_replace("<:LVL:705082168598200331>: ", "", $lvlData[0]);
         $iv = str_replace("<:IV:705082225066115142>: ", "", $ivData[0]);
+        $dpsData = str_replace("<:DSP:703419665132814396>: ", "", $dps[0]);
+        $dpsData = explode(" ",$dpsData);
+        $dpsValue = $dpsData[0] * 60 + $dpsData[2];
+        if ($dpsValue < 60 * 3) {
+            return json_encode(['success' => true]);
+        }
 
         $message .= "Rank $rankArray[1] $rankArray[2] $rankArray[3] $rankArray[5] \n";
         $message .= "Stardust: " . str_replace("<:Stardust:703420173289390150> ", "", $stardust[0]) . "  Candy: " . str_replace("<:Candy:705082286714126416> ", "", $candy[0]) . " \n";

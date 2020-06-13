@@ -9,6 +9,7 @@ use App\Notifications\PokemonRegistrationNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+
 class PokemonRegistrationController extends Controller
 {
     /**
@@ -68,6 +69,20 @@ class PokemonRegistrationController extends Controller
             $messageReply .= ($pokemonRegistration->cp != 0) ? strtoupper("CP " . $pokemonRegistration->cp) . " | " : "";
             $messageReply .= ($pokemonRegistration->level != 0) ? strtoupper("LVL " . $pokemonRegistration->level) . " | " : "";
             $messageReply .= "Registered\n";
+
+//            $validator = Validator::make($pokemonRegistration->toArray(), [
+//                'channel_id' => 'required',
+//                'iv' => 'required|max:100|min:0',
+//                'level' => 'required|max:35|min:35'
+//            ]);
+//
+//            if ($validator->fails()) {
+//                $pokemonRegistration->notify(new PokemonRegistrationNotification($pokemonRegistration, $messageReply));
+//                return json_encode([
+//                    'success' => false,
+//                    'data' => $validator->errors(),
+//                ]);
+//            }
             $pokemonRegistration->save();
 //            $pokemonRegistration->notify(new PokemonRegistrationNotification($pokemonRegistration, $messageReply));
             return json_encode([
@@ -119,9 +134,11 @@ class PokemonRegistrationController extends Controller
             $message .= ($pokemonRegistration->level != 0) ? strtoupper("LVL " . $pokemonRegistration->level) . " | " : "";
             $message .= "Registered\n";
         }
+        if(count($pokemonRegistrations) > 0){
+            $pokemonRegistrations[0]->notify(new PokemonRegistrationNotification($pokemonRegistrations[0], $message));
+        }
         return json_encode([
-            'success' => true,
-            'message' => $message
+            'success' => true
         ]);
     }
 

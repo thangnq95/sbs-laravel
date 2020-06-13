@@ -16,9 +16,7 @@ class PokemonRegistration extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'no', 'name', 'discord_user_id', 'channel_id', 'channel_name'
-    ];
+    protected $guarded = [];
 
     public function routeNotificationForDiscord()
     {

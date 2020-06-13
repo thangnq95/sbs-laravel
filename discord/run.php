@@ -44,6 +44,7 @@ $discord->on('ready', function ($discord) {
                         break;
                     case 'off':
                         {
+                            $data['value'] = isset($messageDetect[2])?$messageDetect[2]:"";
                             $response = httpPostNonCurl(URL_LIST['notify'], $data);
                             $response = json_decode($response, true);
                             reply($message, $response['message']);

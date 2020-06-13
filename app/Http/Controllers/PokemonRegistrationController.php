@@ -7,6 +7,7 @@ use App\Model\Pokemon;
 use App\Model\PokemonRegistration;
 use App\Notifications\PokemonRegistrationNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 
 
@@ -47,19 +48,19 @@ class PokemonRegistrationController extends Controller
                 'message' => implode(",", $errorField) . " invalid."
             ]);
         } else {
-            $pokemonRegistration = PokemonRegistration::create(
+            $pokemonRegistration = PokemonRegistration::firstOrCreate(
                 [
                     'discord_user_id' => $discordUserId,
-                    'channel_id' => $channelId
+                    'channel_id' => $channelId,
+                    'channel_name' => $channelName,
+                    'pokemon_name' => isset($pokemon->name) ? $pokemon->name : "",
+                    'no' => isset($pokemon->no) ? $pokemon->no : null,
+                    'country' => isset($country->name) ? $country->name : "",
+                    'iv' => ($request->has('iv')) ? $request->get('iv') : 0,
+                    'cp' => ($request->has('cp')) ? $request->get('cp') : 0,
+                    'level' => ($request->has('level')) ? $request->get('level') : 0,
                 ]
             );
-            $pokemonRegistration->channel_name = $channelName;
-            $pokemonRegistration->pokemon_name = isset($pokemon->name) ? $pokemon->name : "";
-            $pokemonRegistration->no = isset($pokemon->no) ? $pokemon->no : null;
-            $pokemonRegistration->country = isset($country->name) ? $country->name : "";
-            $pokemonRegistration->iv = ($request->has('iv')) ? $request->get('iv') : 0;
-            $pokemonRegistration->cp = ($request->has('cp')) ? $request->get('cp') : 0;
-            $pokemonRegistration->level = ($request->has('level')) ? $request->get('level') : 0;
 
             $messageReply = "";
             $messageReply .= ($pokemonRegistration->pokemon_name != "") ? $pokemonRegistration->pokemon_name . " " : "";
@@ -102,11 +103,23 @@ class PokemonRegistrationController extends Controller
      */
     public function notifyOff(Request $request)
     {
+        DB::statement(DB::raw('set @row:=0'));
         $discord_user_id = $request->get('discord_user_id');
-        $rs = PokemonRegistration::where('discord_user_id', $discord_user_id)->delete();
+        $value = $request->get('value');
+        $message = "";
+        if ($value == "all") {
+            PokemonRegistration::where('discord_user_id', $discord_user_id)->delete();
+            $message = "All notification is off";
+        } else {
+            $valueArr = explode(",", $value);
+            PokemonRegistration::selectRaw('*, @row:=@row+1 as row')
+                ->where('discord_user_id', $discord_user_id)
+                ->whereIn('id', $valueArr)->delete();
+            $message = "Notify number " . $value . " is off";
+        }
         return json_encode([
             'success' => true,
-            'message' => "Notification is off."
+            'message' => $message
         ]);
     }
 
@@ -124,8 +137,8 @@ class PokemonRegistrationController extends Controller
             ['status', 1]
         ])->get();
         $message = "";
-        foreach ($pokemonRegistrations as $pokemonRegistration) {
-            $message .= "● ";
+        foreach ($pokemonRegistrations as $key => $pokemonRegistration) {
+            $message .= ($key + 1) . ". ";
             $message .= ($pokemonRegistration->channel_name != "") ? strtoupper($pokemonRegistration->channel_name) . " | " : "";
             $message .= ($pokemonRegistration->pokemon_name != "") ? "Pokemon name: " . strtoupper($pokemonRegistration->pokemon_name) . " | " : "";
             $message .= ($pokemonRegistration->country != "") ? "Country: " . strtoupper($pokemonRegistration->country) . " | " : "";
@@ -134,11 +147,9 @@ class PokemonRegistrationController extends Controller
             $message .= ($pokemonRegistration->level != 0) ? strtoupper("LVL " . $pokemonRegistration->level) . " | " : "";
             $message .= "Registered\n";
         }
-        if(count($pokemonRegistrations) > 0){
-            $pokemonRegistrations[0]->notify(new PokemonRegistrationNotification($pokemonRegistrations[0], $message));
-        }
         return json_encode([
-            'success' => true
+            'success' => true,
+            'message' => ($message == "") ? "Data not found!" : $message
         ]);
     }
 
@@ -229,7 +240,7 @@ class PokemonRegistrationController extends Controller
         $lvl = str_replace("<:LVL:705082168598200331>: ", "", $lvlData[0]);
         $iv = str_replace("<:IV:705082225066115142>: ", "", $ivData[0]);
         $dpsData = str_replace("<:DSP:703419665132814396>: ", "", $dps[0]);
-        $dpsData = explode(" ",$dpsData);
+        $dpsData = explode(" ", $dpsData);
         $dpsValue = $dpsData[0] * 60 + $dpsData[2];
         if ($dpsValue < 60 * 3) {
             return json_encode(['success' => true]);

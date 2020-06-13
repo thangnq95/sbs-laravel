@@ -20,7 +20,7 @@ $discord->on('ready', function ($discord) {
     $discord->on('message', function ($message) {
         //Check correct channel to listen
         $channel_id = $message->channel_id;
-        if ($channel_id == CHANNEL_LIST['register']) {
+        if (in_array($channel_id,[CHANNEL_LIST['test-notify'],CHANNEL_LIST['beta-tester'],CHANNEL_LIST['notify-bot']])) {
             $messageDetect = explode(" ", $message->content);
             $prefix = $messageDetect[0];
             if ($prefix == '!notify') {

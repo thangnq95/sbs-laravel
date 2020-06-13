@@ -48,6 +48,7 @@ const MESSAGE_LIST = [
 
         "● IV is invalid in iv100 channel\n" .
         "● Only 1 filter / channel\n" .
+        "● DSP time is above 3 minutes\n" .
         "\n" .
         "**!notify list**: To list all notifications\n" .
         "\n" .

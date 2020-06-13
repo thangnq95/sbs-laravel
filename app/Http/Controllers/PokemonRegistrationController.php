@@ -46,7 +46,7 @@ class PokemonRegistrationController extends Controller
                 'message' => implode(",", $errorField) . " invalid."
             ]);
         } else {
-            $pokemonRegistration = PokemonRegistration::firstOrNew(
+            $pokemonRegistration = PokemonRegistration::create(
                 [
                     'discord_user_id' => $discordUserId,
                     'channel_id' => $channelId

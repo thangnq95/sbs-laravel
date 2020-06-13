@@ -85,7 +85,7 @@ class PokemonRegistrationController extends Controller
 //                ]);
 //            }
             $pokemonRegistration->save();
-//            $pokemonRegistration->notify(new PokemonRegistrationNotification($pokemonRegistration, $messageReply));
+            $pokemonRegistration->notify(new PokemonRegistrationNotification($pokemonRegistration, $messageReply));
             return json_encode([
                 'success' => true,
                 'message' => $messageReply,
@@ -112,9 +112,15 @@ class PokemonRegistrationController extends Controller
             $message = "All notification is off";
         } else {
             $valueArr = explode(",", $value);
-            PokemonRegistration::selectRaw('*, @row:=@row+1 as row')
-                ->where('discord_user_id', $discord_user_id)
-                ->whereIn('id', $valueArr)->delete();
+            $idsDeleted = [];
+            $ids = PokemonRegistration::selectRaw('id, @row:=@row+1 as row')->get();
+            foreach ($ids as $id) {
+                if (in_array($id->row, $valueArr)) {
+                    array_push($idsDeleted, $id->id);
+                }
+            }
+            PokemonRegistration::where('discord_user_id', $discord_user_id)
+                ->whereIn('id', $idsDeleted)->delete();
             $message = "Notify number " . $value . " is off";
         }
         return json_encode([
@@ -146,6 +152,9 @@ class PokemonRegistrationController extends Controller
             $message .= ($pokemonRegistration->cp != 0) ? strtoupper("CP " . $pokemonRegistration->cp) . " | " : "";
             $message .= ($pokemonRegistration->level != 0) ? strtoupper("LVL " . $pokemonRegistration->level) . " | " : "";
             $message .= "Registered\n";
+        }
+        if ($message != "") {
+            $pokemonRegistrations[0]->notify(new PokemonRegistrationNotification($pokemonRegistrations[0], $message));
         }
         return json_encode([
             'success' => true,

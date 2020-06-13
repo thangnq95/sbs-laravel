@@ -19,7 +19,7 @@ class CreatePokemonRegistrationsTable extends Migration
             $table->string('pokemon_name',50)->default("");
             $table->string('discord_user_id');
             $table->string('discord_user_name')->nullable();
-            $table->string('channel_id');
+            $table->string('channel_id',500);
             $table->string('channel_name',50);
             $table->string('country', 50)->default("");
             $table->integer('iv')->default(0);

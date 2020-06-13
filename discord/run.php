@@ -44,7 +44,7 @@ $discord->on('ready', function ($discord) {
                         break;
                     case 'off':
                         {
-                            $data['value'] = isset($messageDetect[2])?$messageDetect[2]:"";
+                            $data['value'] = isset($messageDetect[2]) ? $messageDetect[2] : "";
                             $response = httpPostNonCurl(URL_LIST['notify'], $data);
                             $response = json_decode($response, true);
                             reply($message, $response['message']);
@@ -88,6 +88,20 @@ $discord->on('ready', function ($discord) {
                             sendRegisterRequest($message, $data);
                         }
                         break;
+                    case 'all':
+                        {
+                            for ($i = 2; $i < count($messageDetect); $i++) {
+                                $filterDataRaw = explode(":", $messageDetect[$i]);
+                                if (count($filterDataRaw) == 2) {
+                                    $data[$filterDataRaw[0]] = $filterDataRaw[1];
+                                }
+                            }
+                            $data['channel_name'] = $messageDetect[1];
+                            $data['channel_id'] = implode(",", CHANNEL_LIST);
+                            sendRegisterRequest($message, $data);
+                        }
+                        break;
+
                     default:
                         break;
                 }

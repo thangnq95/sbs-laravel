@@ -36,8 +36,9 @@ const MESSAGE_LIST = [
         "!notify help: Show all the commands\n\n" .
         "!notify channel_name filter1:value1 filter2:value2 .. filterN:valueN\n\n" .
         "**CURRENT CHANNEL LIST**\n" .
-        "iv100 | iv90 | ultra-rare | ditto-master | gen1 | gen2 | gen3 | gen4 | gen5 | cp-2500\n".
-        "rank1 | rank2-5 | rank6-10 | rank11-20\n\n" .
+        "iv100 | iv90 | ultra-rare | ditto-master | gen1 | gen2 | gen3 | gen4 | gen5 | cp-2500\n" .
+        "rank1 | rank2-5 | rank6-10 | rank11-20\n" .
+        "all : Register in all of channel\n\n" .
         "**FILTER LIST**\n" .
         "pokemon_name: | iv: | cp: | level: | country: \n\n" .
         "**EXAMPLES**\n" .

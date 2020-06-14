@@ -101,8 +101,10 @@ $discord->on('ready', function ($discord) {
                             sendRegisterRequest($message, $data);
                         }
                         break;
-
                     default:
+                        {
+                            reply($message, MESSAGE_LIST['channel_invalid']);
+                        }
                         break;
                 }
             }

@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PokemonRegistrationRequest;
 use App\Model\Country;
 use App\Model\Pokemon;
 use App\Model\PokemonRegistration;
 use App\Notifications\PokemonRegistrationNotification;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 
 
@@ -19,7 +19,7 @@ class PokemonRegistrationController extends Controller
      * @param Request $request
      * @return false|object
      */
-    public function store(Request $request)
+    public function store(PokemonRegistrationRequest $request)
     {
         $channelName = $request->get('channel_name');
         $channelId = $request->get('channel_id');

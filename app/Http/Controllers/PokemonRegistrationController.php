@@ -113,7 +113,9 @@ class PokemonRegistrationController extends Controller
         } else {
             $valueArr = explode(",", $value);
             $idsDeleted = [];
-            $ids = PokemonRegistration::selectRaw('id, @row:=@row+1 as row')->get();
+            $ids = PokemonRegistration::selectRaw('id, @row:=@row+1 as row')
+                ->where('discord_user_id', $discord_user_id)
+                ->get();
             foreach ($ids as $id) {
                 if (in_array($id->row, $valueArr)) {
                     array_push($idsDeleted, $id->id);

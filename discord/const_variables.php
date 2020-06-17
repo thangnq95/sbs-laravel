@@ -53,8 +53,10 @@ const MESSAGE_LIST = [
         "\n" .
         "**!notify list**: To list all notifications\n" .
         "\n" .
-        "**!notify off**: Turn off all notification\n",
-    "channel_invalid" => "Channel is invalid."
+        "**!notify off all**: Turn off all notification\n".
+        "**!notify off 1,2,3**: 1,2,3 number in !notify list\n",
+    "channel_invalid" => "Channel is invalid.",
+    "command_invalid" => "Command invalid."
 ];
 
 
